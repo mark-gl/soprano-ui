@@ -9,6 +9,18 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
+  "dependencies": {
+    "@radix-ui/number": "^1.0.1",
+    "@radix-ui/primitive": "^1.0.1",
+    "@radix-ui/react-collection": "^1.0.3",
+    "@radix-ui/react-compose-refs": "^1.0.1",
+    "@radix-ui/react-context": "^1.0.1",
+    "@radix-ui/react-direction": "^1.0.1",
+    "@radix-ui/react-primitive": "^1.0.3",
+    "@radix-ui/react-use-controllable-state": "^1.0.1",
+    "@radix-ui/react-use-previous": "^1.0.1",
+    "@radix-ui/react-use-size": "^1.0.1"
+  },
   "peerDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
