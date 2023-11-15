@@ -1,3 +1,3 @@
-import { Button } from "./stories/Button";
+import { Button } from "./button/Button";
 
 export { Button };
