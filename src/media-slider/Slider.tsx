@@ -103,6 +103,7 @@ interface SliderProps
   onValueCommit?(value: number[]): void;
   inverted?: boolean;
   keyboardFocusOnly?: boolean;
+  keyboardStepMultiplier?: number;
 }
 
 const Slider = React.forwardRef<SliderElement, SliderProps>(
@@ -121,6 +122,7 @@ const Slider = React.forwardRef<SliderElement, SliderProps>(
       onValueCommit = () => {},
       inverted = false,
       keyboardFocusOnly = false,
+      keyboardStepMultiplier = 1,
       ...sliderProps
     } = props;
     const [slider, setSlider] = React.useState<HTMLSpanElement | null>(null);
@@ -238,7 +240,8 @@ const Slider = React.forwardRef<SliderElement, SliderProps>(
                   const multiplier = isSkipKey ? 10 : 1;
                   const atIndex = valueIndexToChangeRef.current;
                   const value = values[atIndex];
-                  const stepInDirection = step * multiplier * stepDirection;
+                  const stepInDirection =
+                    step * multiplier * keyboardStepMultiplier * stepDirection;
                   updateValues(value + stepInDirection, atIndex, {
                     commit: true,
                   });
