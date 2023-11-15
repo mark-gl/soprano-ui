@@ -1,4 +1,4 @@
-/* 
+/*
 Modified from https://github.com/radix-ui/primitives/blob/main/packages/react/slider/src/Slider.tsx
 
 MIT License
@@ -77,6 +77,7 @@ type SliderContextValue = {
   valueIndexToChangeRef: React.MutableRefObject<number>;
   thumbs: Set<SliderThumbElement>;
   orientation: SliderProps["orientation"];
+  keyboardFocusOnly: boolean;
 };
 
 const [SliderProvider, useSliderContext] =
@@ -101,6 +102,7 @@ interface SliderProps
   onValueChange?(value: number[]): void;
   onValueCommit?(value: number[]): void;
   inverted?: boolean;
+  keyboardFocusOnly?: boolean;
 }
 
 const Slider = React.forwardRef<SliderElement, SliderProps>(
@@ -118,6 +120,7 @@ const Slider = React.forwardRef<SliderElement, SliderProps>(
       onValueChange = () => {},
       onValueCommit = () => {},
       inverted = false,
+      keyboardFocusOnly = false,
       ...sliderProps
     } = props;
     const [slider, setSlider] = React.useState<HTMLSpanElement | null>(null);
@@ -135,8 +138,10 @@ const Slider = React.forwardRef<SliderElement, SliderProps>(
       prop: value,
       defaultProp: defaultValue,
       onChange: (value) => {
-        const thumbs = [...thumbRefs.current];
-        thumbs[valueIndexToChangeRef.current]?.focus();
+        if (!keyboardFocusOnly) {
+          const thumbs = [...thumbRefs.current];
+          thumbs[valueIndexToChangeRef.current]?.focus();
+        }
         onValueChange(value);
       },
     });
@@ -196,6 +201,7 @@ const Slider = React.forwardRef<SliderElement, SliderProps>(
         thumbs={thumbRefs.current}
         values={values}
         orientation={orientation}
+        keyboardFocusOnly={keyboardFocusOnly}
       >
         <Collection.Provider scope={props.__scopeSlider}>
           <Collection.Slot scope={props.__scopeSlider}>
@@ -504,7 +510,9 @@ const SliderImpl = React.forwardRef<SliderImplElement, SliderImplProps>(
           // Touch devices have a delay before focusing so won't focus if touch immediately moves
           // away from target (sliding). We want thumb to focus regardless.
           if (context.thumbs.has(target)) {
-            target.focus();
+            if (!context.keyboardFocusOnly) {
+              target.focus();
+            }
           } else {
             onSlideStart(event);
           }
