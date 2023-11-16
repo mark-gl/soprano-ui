@@ -5,6 +5,14 @@ const meta = {
   title: "Example/MediaSlider",
   component: MediaSlider,
   tags: ["autodocs"],
+  args: {
+    min: 0,
+    max: 180,
+    step: 0.1,
+    keyboardStepMultiplier: 150,
+    keyboardFocusOnly: true,
+    thumbAlignment: "center",
+  },
 } satisfies Meta<typeof MediaSlider>;
 
 export default meta;
