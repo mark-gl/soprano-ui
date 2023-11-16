@@ -19,3 +19,22 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {};
+
+export const Vertical: Story = {
+  args: {
+    orientation: "vertical",
+  },
+};
+
+export const RTL: Story = {
+  args: {
+    dir: "rtl",
+  },
+};
+
+export const VerticalRTL = {
+  args: {
+    orientation: "vertical",
+    dir: "rtl",
+  },
+};
