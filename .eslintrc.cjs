@@ -7,11 +7,14 @@ module.exports = {
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "plugin:storybook/recommended",
+    "plugin:prettier/recommended",
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parser: "@typescript-eslint/parser",
   plugins: ["react-refresh", "react"],
   rules: {
+    indent: ["error", 2],
+    quotes: ["error", "double"],
     "react-refresh/only-export-components": [
       "warn",
       { allowConstantExport: true },

@@ -57,7 +57,9 @@
   opacity: 0;
   border-radius: var(--slider-thumb-size);
   border: var(--slider-thumb-border-size) solid var(--slider-color);
-  transition: box-shadow 100ms ease, transform 100ms ease;
+  transition:
+    box-shadow 100ms ease,
+    transform 100ms ease;
 }
 
 .thumb:hover:not([data-disabled]),
