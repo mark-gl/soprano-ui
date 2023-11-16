@@ -1,27 +1,57 @@
-# React + TypeScript + Vite
+# soprano-ui
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React components tailored for use in media playing applications
 
-Currently, two official plugins are available:
+### Usage
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Make sure you have `react` and `react-dom` installed in your project:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+```bash
+npm install react react-dom
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+2. Install this package:
+
+```bash
+npm install soprano-ui
+```
+
+### Components
+
+Currently this package only exports one component, **MediaSlider**, which is a modified/styled version of the [Radix](https://github.com/radix-ui/primitives) Slider component. It accepts three new props:
+
+#### `keyboardFocusOnly`
+
+- **Type**: `boolean`
+- **Default**: `false`
+- **Description**: Prevents mouse clicks from focusing the slider when set to `true`. Note that the slider can still be focused using the Tab key and adjusted with the keyboard as usual.
+
+#### `keyboardStepMultiplier`
+
+- **Type**: `number`
+- **Default**: `1`
+- **Description**: Scales the amount that keyboard interactions will increment/decrement the slider value by. This would be useful for a media 'seek' slider, allowing precision control with a mouse but larger jumps (e.g. 5-10 seconds at a time) with a keyboard.
+
+#### `thumbAlignment`
+
+- **Type**: `"contain" | "center"`
+- **Default**: `"contain"`
+- **Description**: Determines how the slider 'thumb' position is calculated. If set to `"contain"`, the thumb will stay contained within the slider. If set to `"center"`, the thumb will extend beyond the slider track so that it can stay centered on the current value.
+
+### Building
+
+You can view the component stories by cloning this repository and running:
+
+```bash
+npm install
+npm run storybook
+```
+
+The component library can be built with the `build` command:
+
+```bash
+npm run build
+```
+
+### License
+Distributed under the MIT License. See `LICENSE` file for more information.
