@@ -42,6 +42,7 @@ import type * as Radix from "@radix-ui/react-primitive";
 import type { Scope } from "@radix-ui/react-context";
 
 type Direction = "ltr" | "rtl";
+type ThumbAlignment = "contain" | "center";
 
 const PAGE_KEYS = ["PageUp", "PageDown"];
 const ARROW_KEYS = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
@@ -78,6 +79,7 @@ type SliderContextValue = {
   thumbs: Set<SliderThumbElement>;
   orientation: SliderProps["orientation"];
   keyboardFocusOnly: boolean;
+  thumbAlignment: ThumbAlignment;
 };
 
 const [SliderProvider, useSliderContext] =
@@ -104,6 +106,7 @@ interface SliderProps
   inverted?: boolean;
   keyboardFocusOnly?: boolean;
   keyboardStepMultiplier?: number;
+  thumbAlignment?: ThumbAlignment;
 }
 
 const Slider = React.forwardRef<SliderElement, SliderProps>(
@@ -123,6 +126,7 @@ const Slider = React.forwardRef<SliderElement, SliderProps>(
       inverted = false,
       keyboardFocusOnly = false,
       keyboardStepMultiplier = 1,
+      thumbAlignment = "contain",
       ...sliderProps
     } = props;
     const [slider, setSlider] = React.useState<HTMLSpanElement | null>(null);
@@ -204,6 +208,7 @@ const Slider = React.forwardRef<SliderElement, SliderProps>(
         values={values}
         orientation={orientation}
         keyboardFocusOnly={keyboardFocusOnly}
+        thumbAlignment={thumbAlignment}
       >
         <Collection.Provider scope={props.__scopeSlider}>
           <Collection.Slot scope={props.__scopeSlider}>
@@ -221,6 +226,7 @@ const Slider = React.forwardRef<SliderElement, SliderProps>(
               min={min}
               max={max}
               inverted={inverted}
+              thumbAlignment={thumbAlignment}
               onSlideStart={disabled ? undefined : handleSlideStart}
               onSlideMove={disabled ? undefined : handleSlideMove}
               onSlideEnd={disabled ? undefined : handleSlideEnd}
@@ -288,6 +294,7 @@ type SliderOrientationPrivateProps = {
   min: number;
   max: number;
   inverted: boolean;
+  thumbAlignment?: ThumbAlignment;
   onSlideStart?(value: number): void;
   onSlideMove?(value: number): void;
   onSlideEnd?(): void;
@@ -313,6 +320,7 @@ const SliderHorizontal = React.forwardRef<
     max,
     dir,
     inverted,
+    thumbAlignment,
     onSlideStart,
     onSlideMove,
     onSlideEnd,
@@ -354,7 +362,10 @@ const SliderHorizontal = React.forwardRef<
         ref={composedRefs}
         style={{
           ...sliderProps.style,
-          ["--radix-slider-thumb-transform" as any]: "translateX(-50%)",
+          ["--radix-slider-thumb-transform" as any]:
+            !isSlidingFromLeft && thumbAlignment === "center"
+              ? "translateX(50%)"
+              : "translateX(-50%)",
         }}
         onSlideStart={(event) => {
           const value = getValueFromPointer(event.clientX);
@@ -393,6 +404,7 @@ const SliderVertical = React.forwardRef<
     min,
     max,
     inverted,
+    thumbAlignment,
     onSlideStart,
     onSlideMove,
     onSlideEnd,
@@ -430,7 +442,10 @@ const SliderVertical = React.forwardRef<
         ref={ref}
         style={{
           ...sliderProps.style,
-          ["--radix-slider-thumb-transform" as any]: "translateY(50%)",
+          ["--radix-slider-thumb-transform" as any]:
+            !isSlidingFromBottom && thumbAlignment === "center"
+              ? "translateY(-50%)"
+              : "translateY(50%)",
         }}
         onSlideStart={(event) => {
           const value = getValueFromPointer(event.clientY);
@@ -654,9 +669,14 @@ const SliderThumbImpl = React.forwardRef<
       : convertValueToPercentage(value, context.min, context.max);
   const label = getLabel(index, context.values.length);
   const orientationSize = size?.[orientation.size];
-  const thumbInBoundsOffset = orientationSize
-    ? getThumbInBoundsOffset(orientationSize, percent, orientation.direction)
-    : 0;
+  let thumbInBoundsOffset: number;
+  if (context.thumbAlignment === "center") {
+    thumbInBoundsOffset = 0;
+  } else {
+    thumbInBoundsOffset = orientationSize
+      ? getThumbInBoundsOffset(orientationSize, percent, orientation.direction)
+      : 0;
+  }
 
   React.useEffect(() => {
     if (thumb) {
