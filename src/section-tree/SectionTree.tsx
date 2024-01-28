@@ -62,7 +62,9 @@ export function SectionTree(props: {
             case "empty":
               return (
                 <div style={nodeProps.style}>
-                  <div className={styles.empty}>{nodeProps.node.data.name}</div>
+                  <div className={`${styles.node} ${styles.empty}`}>
+                    {nodeProps.node.data.name}
+                  </div>
                 </div>
               );
             default:

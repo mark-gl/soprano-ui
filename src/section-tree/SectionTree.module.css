@@ -33,8 +33,6 @@
 
 .empty {
   color: var(--tree-empty-text);
-  margin: var(--tree-item-margin);
-  padding: var(--tree-item-padding);
   font-style: italic;
   font-size: 0.9rem;
   user-select: none;
