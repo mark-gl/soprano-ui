@@ -15,7 +15,15 @@ export function SectionTree(props: { sections: Section[] }) {
     }
     const sectionData: TreeItem[] = [
       { id: "header-" + section.id, name: section.name, type: "header" },
-      ...section.children,
+      ...(section.children.length > 0
+        ? section.children
+        : [
+            {
+              id: section.id + "-empty",
+              name: section.emptyMessage,
+              type: "empty" as const,
+            },
+          ]),
     ];
     return acc.concat(sectionData);
   }, []);
@@ -39,11 +47,16 @@ export function SectionTree(props: { sections: Section[] }) {
         }}
       >
         {(props: NodeRendererProps<TreeItem>) => {
-          if (props.node.data.type === "header")
-            return <HeaderNode {...props} />;
-          if (props.node.data.type === "separator")
-            return <div style={props.style} />;
-          return <ItemNode {...props} />;
+          switch (props.node.data.type) {
+            case "header":
+              return <HeaderNode {...props} />;
+            case "separator":
+              return <div style={props.style} />;
+            case "empty":
+              return <div style={props.style}>{props.node.data.name}</div>;
+            default:
+              return <ItemNode {...props} />;
+          }
         }}
       </Tree>
     </div>

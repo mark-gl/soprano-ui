@@ -7,9 +7,10 @@ export type Item = {
 export type Section = {
   id: string;
   name: string;
+  emptyMessage: string;
   children: Item[];
 };
 
 export type TreeItem = Item & {
-  type?: "separator" | "header";
+  type?: "separator" | "header" | "empty";
 };

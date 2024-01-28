@@ -11,11 +11,23 @@ const meta = {
   tags: ["autodocs"],
   args: {
     sections: [
-      { id: "views", name: "Library", children: views },
+      {
+        id: "views",
+        name: "Library",
+        emptyMessage: "No views enabled",
+        children: views,
+      },
       {
         id: "playlists",
         name: "Playlists",
+        emptyMessage: "No playlists",
         children: playlists,
+      },
+      {
+        id: "empty",
+        name: "Empty",
+        emptyMessage: "Example empty section",
+        children: [],
       },
     ],
   },
