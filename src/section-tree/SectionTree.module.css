@@ -7,11 +7,16 @@
   --tree-item-margin: 0.125rem 0.5rem;
   --tree-item-border-radius: 0.25rem;
   --tree-empty-text: #999;
+  --tree-drop-cursor-color: #4c9de4;
 }
 
 .treeContainer {
   flex: 1;
   min-height: 0;
+}
+
+.tree {
+  overflow: hidden auto !important;
 }
 
 .node {

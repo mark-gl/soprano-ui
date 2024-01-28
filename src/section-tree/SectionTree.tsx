@@ -4,6 +4,7 @@ import { TreeItem, Section } from "./treeTypes";
 import { HeaderNode } from "./nodes/HeaderNode";
 import { ItemNode } from "./nodes/ItemNode";
 import { shouldDisableDrop } from "./treeUtils";
+import { DropCursor } from "./DropCursor";
 
 import styles from "./SectionTree.module.css";
 
@@ -35,6 +36,8 @@ export function SectionTree(props: { sections: Section[] }) {
         width={"100%"}
         height={height}
         rowHeight={36}
+        className={styles.tree}
+        renderCursor={DropCursor}
         disableDrag={(node) =>
           node.type === "separator" || node.type === "header"
         }
