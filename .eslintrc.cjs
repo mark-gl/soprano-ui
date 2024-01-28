@@ -20,6 +20,7 @@ module.exports = {
       { allowConstantExport: true },
     ],
     "react/display-name": "off",
+    "react/react-in-jsx-scope": "off",
   },
   settings: {
     react: {
