@@ -3,6 +3,7 @@ import useResizeObserver from "use-resize-observer";
 import { TreeItem, Section } from "./treeTypes";
 import { HeaderNode } from "./nodes/HeaderNode";
 import { ItemNode } from "./nodes/ItemNode";
+import { shouldDisableDrop } from "./treeUtils";
 
 import styles from "./SectionTree.module.css";
 
@@ -13,7 +14,7 @@ export function SectionTree(props: { sections: Section[] }) {
       acc.push({ id: "separator-" + index, type: "separator" });
     }
     const sectionData: TreeItem[] = [
-      { id: section.id, name: section.name, type: "header" },
+      { id: "header-" + section.id, name: section.name, type: "header" },
       ...section.children,
     ];
     return acc.concat(sectionData);
@@ -29,6 +30,13 @@ export function SectionTree(props: { sections: Section[] }) {
         disableDrag={(node) =>
           node.type === "separator" || node.type === "header"
         }
+        disableDrop={(args) => {
+          return shouldDisableDrop(
+            args.dragNodes[0],
+            args.parentNode,
+            args.index
+          );
+        }}
       >
         {(props: NodeRendererProps<TreeItem>) => {
           if (props.node.data.type === "header")
