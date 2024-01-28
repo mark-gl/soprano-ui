@@ -53,7 +53,11 @@ export function SectionTree(props: { sections: Section[] }) {
             case "separator":
               return <div style={props.style} />;
             case "empty":
-              return <div style={props.style}>{props.node.data.name}</div>;
+              return (
+                <div style={props.style}>
+                  <div className={styles.empty}>{props.node.data.name}</div>
+                </div>
+              );
             default:
               return <ItemNode {...props} />;
           }

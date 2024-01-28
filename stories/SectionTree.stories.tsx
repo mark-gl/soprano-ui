@@ -39,7 +39,9 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   render: (args) => (
     <Allotment>
-      <SectionTree {...args} />
+      <div style={{ fontFamily: "Segoe UI" }}>
+        <SectionTree {...args} />
+      </div>
       <div></div>
     </Allotment>
   ),
