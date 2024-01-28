@@ -30,6 +30,8 @@ const meta = {
         children: [],
       },
     ],
+    FolderOpenIcon: () => <div>V</div>,
+    FolderClosedIcon: () => <div>&gt;</div>,
   },
 } satisfies Meta<typeof SectionTree>;
 

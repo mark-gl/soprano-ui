@@ -8,7 +8,11 @@ import { DropCursor } from "./DropCursor";
 
 import styles from "./SectionTree.module.css";
 
-export function SectionTree(props: { sections: Section[] }) {
+export function SectionTree(props: {
+  sections: Section[];
+  FolderOpenIcon: () => JSX.Element;
+  FolderClosedIcon: () => JSX.Element;
+}) {
   const { ref, height } = useResizeObserver();
   const data = props.sections.reduce<TreeItem[]>((acc, section, index) => {
     if (index > 0) {
@@ -49,20 +53,26 @@ export function SectionTree(props: { sections: Section[] }) {
           );
         }}
       >
-        {(props: NodeRendererProps<TreeItem>) => {
-          switch (props.node.data.type) {
+        {(nodeProps: NodeRendererProps<TreeItem>) => {
+          switch (nodeProps.node.data.type) {
             case "header":
-              return <HeaderNode {...props} />;
+              return <HeaderNode {...nodeProps} />;
             case "separator":
-              return <div style={props.style} />;
+              return <div style={nodeProps.style} />;
             case "empty":
               return (
-                <div style={props.style}>
-                  <div className={styles.empty}>{props.node.data.name}</div>
+                <div style={nodeProps.style}>
+                  <div className={styles.empty}>{nodeProps.node.data.name}</div>
                 </div>
               );
             default:
-              return <ItemNode {...props} />;
+              return (
+                <ItemNode
+                  {...nodeProps}
+                  FolderOpenIcon={props.FolderOpenIcon}
+                  FolderClosedIcon={props.FolderClosedIcon}
+                />
+              );
           }
         }}
       </Tree>
