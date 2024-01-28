@@ -9,3 +9,7 @@ export type Section = {
   name: string;
   children: Item[];
 };
+
+export type TreeItem = Item & {
+  type?: "separator" | "header";
+};

@@ -1,16 +1,19 @@
-import { Tree } from "react-arborist";
+import { NodeRendererProps, Tree } from "react-arborist";
 import useResizeObserver from "use-resize-observer";
+import { TreeItem, Section } from "./treeTypes";
+import { HeaderNode } from "./nodes/HeaderNode";
+import { ItemNode } from "./nodes/ItemNode";
+
 import styles from "./SectionTree.module.css";
-import { Item, Section } from "./treeTypes";
 
 export function SectionTree(props: { sections: Section[] }) {
   const { ref, height } = useResizeObserver();
-  const data = props.sections.reduce<Item[]>((acc, section, index) => {
+  const data = props.sections.reduce<TreeItem[]>((acc, section, index) => {
     if (index > 0) {
-      acc.push({ id: "separator-" + index });
+      acc.push({ id: "separator-" + index, type: "separator" });
     }
-    const sectionData = [
-      { id: section.id, name: section.name },
+    const sectionData: TreeItem[] = [
+      { id: section.id, name: section.name, type: "header" },
       ...section.children,
     ];
     return acc.concat(sectionData);
@@ -23,7 +26,18 @@ export function SectionTree(props: { sections: Section[] }) {
         width={"100%"}
         height={height}
         rowHeight={36}
-      ></Tree>
+        disableDrag={(node) =>
+          node.type === "separator" || node.type === "header"
+        }
+      >
+        {(props: NodeRendererProps<TreeItem>) => {
+          if (props.node.data.type === "header")
+            return <HeaderNode {...props} />;
+          if (props.node.data.type === "separator")
+            return <div style={props.style} />;
+          return <ItemNode {...props} />;
+        }}
+      </Tree>
     </div>
   );
 }
