@@ -13,14 +13,14 @@ import styles from "./SectionTree.module.css";
 export const SectionTree = React.forwardRef(
   (
     props: TreeProps<TreeItem> & {
-      sections: Section[];
+      sections?: Section[];
       FolderOpenIcon: () => JSX.Element;
       FolderClosedIcon: () => JSX.Element;
     },
     forwardRef: ForwardedRef<TreeApi<TreeItem> | undefined>
   ) => {
     const { ref, height } = useResizeObserver();
-    const data = props.sections.reduce<TreeItem[]>((acc, section, index) => {
+    const data = props.sections?.reduce<TreeItem[]>((acc, section, index) => {
       if (index > 0) {
         acc.push({ id: "separator-" + index, type: "separator" });
       }
