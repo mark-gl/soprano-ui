@@ -57,7 +57,6 @@ export const shouldDisableDrop = (
 
   if (
     destinationSection != sourceSection ||
-    destinationTopLevelIndex == sectionHeaderIndices![destinationSection] ||
     destinationTopLevelIndex == sectionHeaderIndices![destinationSection]
   ) {
     return true;
