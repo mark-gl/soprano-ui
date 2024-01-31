@@ -5,7 +5,7 @@ import useResizeObserver from "use-resize-observer";
 import { TreeItem, Section } from "./treeTypes";
 import { HeaderNode } from "./nodes/HeaderNode";
 import { ItemNode } from "./nodes/ItemNode";
-import { shouldDisableDrop } from "./treeUtils";
+import { findSection, findTopLevelIndex, shouldDisableDrop } from "./treeUtils";
 import { DropCursor } from "./DropCursor";
 
 import styles from "./SectionTree.module.css";
@@ -16,17 +16,23 @@ export const SectionTree = React.forwardRef(
       sections?: Section[];
       FolderOpenIcon: () => JSX.Element;
       FolderClosedIcon: () => JSX.Element;
+      onMoveWithinSection: (args: {
+        sectionId: string;
+        movedItemId: string;
+        newParentId: string | null;
+        newIndex: number;
+      }) => void;
     },
     forwardRef: ForwardedRef<TreeApi<TreeItem> | undefined>
   ) => {
     const { ref, height } = useResizeObserver();
     const data = props.sections?.reduce<TreeItem[]>((acc, section, index) => {
       if (index > 0) {
-        acc.push({ id: "separator-" + index, type: "separator" });
+        acc.push({ id: "separator-" + index, name: "", type: "separator" });
       }
       const sectionData: TreeItem[] = [
         { id: "header-" + section.id, name: section.name, type: "header" },
-        ...(section.children.length > 0
+        ...(section.children?.length > 0
           ? section.children
           : [
               {
@@ -44,7 +50,7 @@ export const SectionTree = React.forwardRef(
         <Tree
           {...props}
           ref={forwardRef}
-          initialData={data}
+          data={data}
           width={"100%"}
           height={height}
           rowHeight={36}
@@ -59,6 +65,34 @@ export const SectionTree = React.forwardRef(
               args.parentNode,
               args.index
             );
+          }}
+          onMove={(args) => {
+            if (!props.sections) return;
+            const { parentId, parentNode, index } = args;
+            const dragNode = args.dragNodes[0];
+
+            const sectionHeaderIndices = dragNode.tree.props.data
+              ?.map((node, i) => (node.type === "header" ? i : -1))
+              .filter((index) => index !== -1);
+            const topLevelIndex = findTopLevelIndex(
+              dragNode.parent!,
+              dragNode.childIndex
+            );
+
+            const sectionIndex =
+              findSection(sectionHeaderIndices!, topLevelIndex) - 1;
+            let adjustedIndex = index;
+            if (!parentNode) {
+              // If it's top-level, offset the index by the number of items before this section
+              adjustedIndex -= sectionHeaderIndices![sectionIndex] + 1;
+            }
+
+            props.onMoveWithinSection({
+              sectionId: props.sections[sectionIndex].id,
+              movedItemId: dragNode.id,
+              newParentId: parentId,
+              newIndex: adjustedIndex,
+            });
           }}
         >
           {(nodeProps: NodeRendererProps<TreeItem>) => {

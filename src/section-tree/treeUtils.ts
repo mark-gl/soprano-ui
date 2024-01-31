@@ -1,6 +1,28 @@
 import { NodeApi } from "react-arborist";
 import { TreeItem } from "./treeTypes";
 
+export function findNode(data: TreeItem[], id: string): TreeItem | undefined {
+  for (const item of data) {
+    if (item.id === id) return item;
+    const found = item.children && findNode(item.children, id);
+    if (found) return found;
+  }
+}
+
+export function findParentNode(
+  data: TreeItem[],
+  childId: string
+): TreeItem | null {
+  for (const item of data) {
+    if (item.children?.some((child) => child.id === childId)) {
+      return item;
+    }
+    const foundParent = item.children && findParentNode(item.children, childId);
+    if (foundParent) return foundParent;
+  }
+  return null;
+}
+
 export const findTopLevelIndex = (
   node: NodeApi,
   relativeIndex?: number

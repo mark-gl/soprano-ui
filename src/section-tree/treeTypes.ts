@@ -1,6 +1,6 @@
 export type Item = {
   id: string;
-  name?: string;
+  name: string;
   children?: Item[];
 };
 
