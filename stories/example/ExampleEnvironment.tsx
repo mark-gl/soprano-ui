@@ -29,13 +29,13 @@ export function ExampleEnvironment(
       id: "views",
       name: "Library",
       emptyMessage: "No views enabled",
-      children: views,
+      children: views as TreeItem[],
     },
     {
       id: "playlists",
       name: "Playlists",
       emptyMessage: "No playlists",
-      children: playlists,
+      children: playlists as TreeItem[],
     },
     {
       id: "empty",

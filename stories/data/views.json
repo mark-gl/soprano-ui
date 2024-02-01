@@ -1,7 +1,7 @@
 [
-  { "id": "songs", "name": "Songs" },
-  { "id": "albums", "name": "Albums" },
-  { "id": "artists", "name": "Artists" },
-  { "id": "genres", "name": "Genres" },
-  { "id": "composers", "name": "Composers" }
+  { "id": "songs", "name": "Songs", "hidden": false },
+  { "id": "albums", "name": "Albums", "hidden": false },
+  { "id": "artists", "name": "Artists", "hidden": false },
+  { "id": "genres", "name": "Genres", "hidden": false },
+  { "id": "composers", "name": "Composers", "hidden": true }
 ]

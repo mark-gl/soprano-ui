@@ -45,13 +45,14 @@ export const SectionTree = React.forwardRef(
       ];
       return acc.concat(sectionData);
     }, []);
+    const filteredData = data?.filter((node) => !node.hidden);
 
     return (
       <div className={styles.treeContainer} ref={ref}>
         <Tree
           {...props}
           ref={forwardRef}
-          data={data}
+          data={filteredData}
           width={"100%"}
           height={height}
           rowHeight={36}
@@ -84,8 +85,13 @@ export const SectionTree = React.forwardRef(
             const sectionIndex =
               findSection(sectionHeaderIndices!, topLevelIndex) - 1;
             let adjustedIndex = index;
-            if (!parentNode) {
-              // If it's top-level, offset the index by the number of items before this section
+            if (!parentNode && data) {
+              // If it's top-level, offset the index by the number of hidden items before this item
+              adjustedIndex += data
+                .slice(sectionHeaderIndices![sectionIndex], index)
+                .filter((node) => node.hidden).length;
+
+              // Offset the index by the number of items before this section
               adjustedIndex -= sectionHeaderIndices![sectionIndex] + 1;
             }
 
