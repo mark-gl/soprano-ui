@@ -7,6 +7,7 @@ import { HeaderNode } from "./nodes/HeaderNode";
 import { ItemNode } from "./nodes/ItemNode";
 import { findSection, findTopLevelIndex, shouldDisableDrop } from "./treeUtils";
 import { DropCursor } from "./DropCursor";
+import { Row } from "./Row";
 
 import styles from "./SectionTree.module.css";
 
@@ -56,6 +57,7 @@ export const SectionTree = React.forwardRef(
           rowHeight={36}
           className={styles.tree}
           renderCursor={DropCursor}
+          renderRow={Row}
           disableDrag={(node) =>
             node.type === "separator" || node.type === "header"
           }
