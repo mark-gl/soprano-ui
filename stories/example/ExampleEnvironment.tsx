@@ -1,13 +1,18 @@
 import { Allotment } from "allotment";
-import React from "react";
+import React, { useRef } from "react";
 import { SectionTree } from "../../src/section-tree/SectionTree";
 import views from "../data/views.json";
 import playlists from "../data/playlists.json";
 import { TreeProps } from "react-arborist/dist/module/types/tree-props";
-import { TreeItem, Section } from "../../src/section-tree/treeTypes";
+import {
+  TreeItem,
+  Section,
+  SectionTreeApi,
+} from "../../src/section-tree/treeTypes";
 import {
   createTreeNode,
   moveTreeNode,
+  updateTreeNode,
 } from "../../src/section-tree/treeOperations";
 import "allotment/dist/style.css";
 
@@ -73,11 +78,14 @@ export function ExampleEnvironment(
     updateSection(sectionId, newTree);
   };
 
+  const ref = useRef<SectionTreeApi<TreeItem>>(null);
+
   return (
     <div style={{ fontFamily: "Segoe UI", height: "500px" }}>
       <Allotment>
         <SectionTree
           {...props}
+          ref={ref}
           sections={sections}
           onMoveWithinSection={(args) => {
             const sectionIndex = sections.findIndex(
@@ -90,8 +98,28 @@ export function ExampleEnvironment(
             });
             updateSection(args.sectionId, newTree);
           }}
+          onItemVisibilityChange={(sectionId, itemId, hidden) => {
+            const sectionIndex = sections.findIndex(
+              (section) => section.id === sectionId
+            );
+            const newTree = updateTreeNode(sections[sectionIndex].children, {
+              id: itemId,
+              changes: { hidden },
+            });
+            updateSection(sections[sectionIndex].id, newTree);
+          }}
         />
         <div>
+          <button
+            onClick={() =>
+              ref?.current?.setVisibilityEditing(
+                !ref?.current?.visibilityEditing
+              )
+            }
+          >
+            Toggle top-level visibility editing
+          </button>
+          <br />
           {sections.map((section) => (
             <React.Fragment key={section.id}>
               <button onClick={() => createItem(section.id)}>

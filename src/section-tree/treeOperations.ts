@@ -68,3 +68,18 @@ export function deleteTreeNode(
     return acc;
   }, []);
 }
+
+export function updateTreeNode(
+  data: TreeItem[],
+  args: { id: string; changes: Partial<TreeItem> }
+): TreeItem[] {
+  return data.map((item) => {
+    if (item.id === args.id) {
+      return { ...item, ...args.changes };
+    }
+    if (item.children) {
+      item.children = updateTreeNode(item.children, args);
+    }
+    return item;
+  });
+}

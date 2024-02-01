@@ -1,8 +1,13 @@
-import React, { ForwardedRef } from "react";
+import React, {
+  ForwardedRef,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { NodeRendererProps, Tree, TreeApi } from "react-arborist";
 import { TreeProps } from "react-arborist/dist/module/types/tree-props";
 import useResizeObserver from "use-resize-observer";
-import { TreeItem, Section } from "./treeTypes";
+import { TreeItem, Section, SectionTreeApi } from "./treeTypes";
 import { HeaderNode } from "./nodes/HeaderNode";
 import { ItemNode } from "./nodes/ItemNode";
 import { findSection, findTopLevelIndex, shouldDisableDrop } from "./treeUtils";
@@ -23,10 +28,18 @@ export const SectionTree = React.forwardRef(
         newParentId: string | null;
         newIndex: number;
       }) => void;
+      onItemVisibilityChange: (
+        sectionId: string,
+        itemId: string,
+        hidden: boolean
+      ) => void;
     },
-    forwardRef: ForwardedRef<TreeApi<TreeItem> | undefined>
+    forwardRef: ForwardedRef<SectionTreeApi<TreeItem> | undefined>
   ) => {
+    const internalTreeRef = useRef<TreeApi<TreeItem>>(null);
     const { ref, height } = useResizeObserver();
+    const [visibilityEditing, setVisibilityEditing] = useState<boolean>(false);
+
     const data = props.sections?.reduce<TreeItem[]>((acc, section, index) => {
       if (index > 0) {
         acc.push({ id: "separator-" + index, name: "", type: "separator" });
@@ -45,13 +58,32 @@ export const SectionTree = React.forwardRef(
       ];
       return acc.concat(sectionData);
     }, []);
-    const filteredData = data?.filter((node) => !node.hidden);
+    const filteredData = visibilityEditing
+      ? data
+      : data?.filter((node) => !node.hidden);
+
+    useImperativeHandle(
+      forwardRef,
+      () => {
+        const treeApi = internalTreeRef.current;
+        const sectionApi = {
+          setVisibilityEditing: (enabled: boolean) => {
+            setVisibilityEditing(enabled);
+          },
+          visibilityEditing,
+        };
+        return (
+          treeApi ? { ...treeApi, ...sectionApi } : sectionApi
+        ) as SectionTreeApi<TreeItem>;
+      },
+      [internalTreeRef, visibilityEditing]
+    );
 
     return (
       <div className={styles.treeContainer} ref={ref}>
         <Tree
           {...props}
-          ref={forwardRef}
+          ref={internalTreeRef}
           data={filteredData}
           width={"100%"}
           height={height}
@@ -87,9 +119,11 @@ export const SectionTree = React.forwardRef(
             let adjustedIndex = index;
             if (!parentNode && data) {
               // If it's top-level, offset the index by the number of hidden items before this item
-              adjustedIndex += data
-                .slice(sectionHeaderIndices![sectionIndex], index)
-                .filter((node) => node.hidden).length;
+              if (!visibilityEditing) {
+                adjustedIndex += data
+                  .slice(sectionHeaderIndices![sectionIndex], index)
+                  .filter((node) => node.hidden).length;
+              }
 
               // Offset the index by the number of items before this section
               adjustedIndex -= sectionHeaderIndices![sectionIndex] + 1;
@@ -123,6 +157,8 @@ export const SectionTree = React.forwardRef(
                     {...nodeProps}
                     FolderOpenIcon={props.FolderOpenIcon}
                     FolderClosedIcon={props.FolderClosedIcon}
+                    visibilityEditing={visibilityEditing}
+                    onItemVisibilityChange={props.onItemVisibilityChange}
                   />
                 );
             }
