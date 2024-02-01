@@ -1,8 +1,7 @@
-import { NodeRendererProps } from "react-arborist";
+import { NodeApi, NodeRendererProps } from "react-arborist";
 import { TreeItem } from "../treeTypes";
 import treeStyles from "../SectionTree.module.css";
 import styles from "./ItemNode.module.css";
-import { findSection } from "../treeUtils";
 
 export function ItemNode(
   props: NodeRendererProps<TreeItem> & {
@@ -13,6 +12,7 @@ export function ItemNode(
       itemId: string,
       hidden: boolean
     ) => void;
+    onNodeClick: (node: NodeApi<TreeItem>) => void;
     visibilityEditing: boolean;
   }
 ) {
@@ -23,28 +23,14 @@ export function ItemNode(
     props.visibilityEditing;
 
   return (
-    <div style={style} ref={dragHandle}>
-      <div
-        className={`${treeStyles.node} ${styles.item}`}
-        onClick={() => {
-          if (showCheckbox) {
-            const sectionHeaderIndices = node.tree.props.data
-              ?.map((node, i) => (node.type === "header" ? i : -1))
-              .filter((index) => index !== -1);
-            const sectionIndex =
-              findSection(sectionHeaderIndices!, node.childIndex) - 1;
-            const sectionId =
-              node.tree.props.data?.[sectionIndex].id.split("header-")[1];
-            if (!sectionId) {
-              return;
-            }
-
-            props.onItemVisibilityChange(sectionId, node.id, !node.data.hidden);
-          } else if (!node.isLeaf) {
-            node.toggle();
-          }
-        }}
-      >
+    <div
+      style={style}
+      ref={dragHandle}
+      onClick={() => {
+        props.onNodeClick(node);
+      }}
+    >
+      <div className={`${treeStyles.node} ${styles.item}`}>
         {!node.isLeaf && (
           <div className={styles.folderIcon}>
             {node.isOpen ? (

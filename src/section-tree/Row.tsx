@@ -1,4 +1,4 @@
-import { RowRendererProps } from "react-arborist";
+import { NodeApi, RowRendererProps } from "react-arborist";
 import { TreeItem } from "./treeTypes";
 
 export function Row({
@@ -6,7 +6,10 @@ export function Row({
   attrs,
   innerRef,
   children,
-}: RowRendererProps<TreeItem>) {
+  onNodeClick,
+}: RowRendererProps<TreeItem> & {
+  onNodeClick: (node: NodeApi<TreeItem>) => void;
+}) {
   const adjustedAttrs = { ...attrs };
   if (node.data.type === "separator") {
     adjustedAttrs.role = "separator";
@@ -31,6 +34,8 @@ export function Row({
             node.tree.focusedNode?.next?.data.type === "separator"
           ) {
             node.tree.focus(node.next);
+          } else if (e.key === "Enter") {
+            onNodeClick(node);
           }
         }}
       >

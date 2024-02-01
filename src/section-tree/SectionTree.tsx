@@ -4,7 +4,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { NodeRendererProps, Tree, TreeApi } from "react-arborist";
+import { NodeApi, NodeRendererProps, Tree, TreeApi } from "react-arborist";
 import { TreeProps } from "react-arborist/dist/module/types/tree-props";
 import useResizeObserver from "use-resize-observer";
 import { TreeItem, Section, SectionTreeApi } from "./treeTypes";
@@ -82,6 +82,29 @@ export const SectionTree = React.forwardRef(
       [internalTreeRef, visibilityEditing]
     );
 
+    const handleNodeClick = (node: NodeApi<TreeItem>) => {
+      const showCheckbox =
+        node.data.hidden != undefined &&
+        node.parent?.level == -1 &&
+        visibilityEditing;
+
+      if (showCheckbox) {
+        const sectionHeaderIndices = node.tree.props.data
+          ?.map((node, i) => (node.type === "header" ? i : -1))
+          .filter((index) => index !== -1);
+        const sectionIndex =
+          findSection(sectionHeaderIndices!, node.childIndex) - 1;
+        const sectionId =
+          node.tree.props.data?.[sectionIndex].id.split("header-")[1];
+        if (!sectionId) {
+          return;
+        }
+        props.onItemVisibilityChange(sectionId, node.id, !node.data.hidden);
+      } else if (!node.isLeaf) {
+        node.toggle();
+      }
+    };
+
     return (
       <div className={styles.treeContainer} ref={ref}>
         <Tree
@@ -93,7 +116,9 @@ export const SectionTree = React.forwardRef(
           rowHeight={36}
           className={styles.tree}
           renderCursor={DropCursor}
-          renderRow={Row}
+          renderRow={(rowProps) => (
+            <Row {...rowProps} onNodeClick={handleNodeClick} />
+          )}
           disableDrag={(node) =>
             node.type === "separator" || node.type === "header"
           }
@@ -162,6 +187,7 @@ export const SectionTree = React.forwardRef(
                     FolderClosedIcon={props.FolderClosedIcon}
                     visibilityEditing={visibilityEditing}
                     onItemVisibilityChange={props.onItemVisibilityChange}
+                    onNodeClick={handleNodeClick}
                   />
                 );
             }
