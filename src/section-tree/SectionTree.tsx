@@ -44,9 +44,12 @@ export const SectionTree = React.forwardRef(
       if (index > 0) {
         acc.push({ id: "separator-" + index, name: "", type: "separator" });
       }
+      const sectionAllHidden =
+        section.children.filter((node) => node.hidden).length ==
+          section.children.length && !visibilityEditing;
       const sectionData: TreeItem[] = [
         { id: "header-" + section.id, name: section.name, type: "header" },
-        ...(section.children?.length > 0
+        ...(section.children?.length > 0 && !sectionAllHidden
           ? section.children
           : [
               {
