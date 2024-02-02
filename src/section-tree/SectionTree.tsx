@@ -1,5 +1,6 @@
 import React, {
   ForwardedRef,
+  useCallback,
   useImperativeHandle,
   useRef,
   useState,
@@ -22,6 +23,7 @@ export const SectionTree = React.forwardRef(
       sections?: Section[];
       FolderOpenIcon: () => JSX.Element;
       FolderClosedIcon: () => JSX.Element;
+      OptionsButtonIcon: () => JSX.Element;
       onMoveWithinSection: (args: {
         sectionId: string;
         movedItemId: string;
@@ -33,12 +35,24 @@ export const SectionTree = React.forwardRef(
         itemId: string,
         hidden: boolean
       ) => void;
+      onOptionsMenuActiveChange: (sectionId: string | null) => void;
     },
     forwardRef: ForwardedRef<SectionTreeApi<TreeItem> | undefined>
   ) => {
     const internalTreeRef = useRef<TreeApi<TreeItem>>(null);
     const { ref, height } = useResizeObserver();
     const [visibilityEditing, setVisibilityEditing] = useState<boolean>(false);
+    const [optionsMenuActive, setOptionsMenuActive] = useState<string | null>(
+      null
+    );
+
+    const setOptionsMenuActiveCallback = useCallback(
+      (sectionId: string | null) => {
+        setOptionsMenuActive(sectionId);
+        props.onOptionsMenuActiveChange(sectionId);
+      },
+      [props]
+    );
 
     const data = props.sections?.reduce<TreeItem[]>((acc, section, index) => {
       if (index > 0) {
@@ -74,12 +88,21 @@ export const SectionTree = React.forwardRef(
             setVisibilityEditing(enabled);
           },
           visibilityEditing,
+          setOptionsMenuActive: (section: string | null) => {
+            setOptionsMenuActiveCallback(section);
+          },
+          optionsMenuActive,
         };
         return (
           treeApi ? { ...treeApi, ...sectionApi } : sectionApi
         ) as SectionTreeApi<TreeItem>;
       },
-      [internalTreeRef, visibilityEditing]
+      [
+        internalTreeRef,
+        visibilityEditing,
+        optionsMenuActive,
+        setOptionsMenuActiveCallback,
+      ]
     );
 
     const handleNodeClick = (node: NodeApi<TreeItem>) => {
@@ -161,7 +184,14 @@ export const SectionTree = React.forwardRef(
           {(nodeProps: NodeRendererProps<TreeItem>) => {
             switch (nodeProps.node.data.type) {
               case "header":
-                return <HeaderNode {...nodeProps} />;
+                return (
+                  <HeaderNode
+                    {...nodeProps}
+                    OptionsButtonIcon={props.OptionsButtonIcon}
+                    optionsMenuActive={optionsMenuActive}
+                    setOptionsMenuActive={setOptionsMenuActiveCallback}
+                  />
+                );
               case "separator":
                 return <div style={nodeProps.style} />;
               case "empty":

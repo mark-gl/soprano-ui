@@ -21,6 +21,7 @@ export function ExampleEnvironment(
     sections?: Section[];
     FolderOpenIcon: () => JSX.Element;
     FolderClosedIcon: () => JSX.Element;
+    OptionsButtonIcon: () => JSX.Element;
     onMoveWithinSection: (args: {
       sectionId: string;
       movedItemId: string;
@@ -108,6 +109,9 @@ export function ExampleEnvironment(
             });
             updateSection(sections[sectionIndex].id, newTree);
           }}
+          onOptionsMenuActiveChange={(sectionId) => {
+            console.log("Options menu state changed to ", sectionId);
+          }}
         />
         <div>
           <button
@@ -119,7 +123,7 @@ export function ExampleEnvironment(
           >
             Toggle top-level visibility editing
           </button>
-          <br />
+          <br /> <br />
           {sections.map((section) => (
             <React.Fragment key={section.id}>
               <button onClick={() => createItem(section.id)}>
@@ -128,7 +132,18 @@ export function ExampleEnvironment(
               <button onClick={() => createItem(section.id, true)}>
                 Add folder to {section.name}
               </button>
-              <br />
+              <button
+                onClick={() =>
+                  ref?.current?.setOptionsMenuActive(
+                    ref?.current?.optionsMenuActive == section.id
+                      ? null
+                      : section.id
+                  )
+                }
+              >
+                Toggle options menu for {section.name}
+              </button>
+              <br /> <br />
             </React.Fragment>
           ))}
         </div>

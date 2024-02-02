@@ -9,6 +9,7 @@ const meta = {
   args: {
     FolderOpenIcon: () => <div>V</div>,
     FolderClosedIcon: () => <div>&gt;</div>,
+    OptionsButtonIcon: () => <div>*</div>,
   },
 } satisfies Meta<typeof SectionTree>;
 
