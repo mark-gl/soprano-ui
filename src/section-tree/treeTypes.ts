@@ -23,4 +23,5 @@ export type Section = {
 
 export type TreeItem = Item & {
   type?: "separator" | "header" | "empty";
+  sectionId?: string;
 };

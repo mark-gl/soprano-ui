@@ -23,6 +23,24 @@ export function findParentNode(
   return null;
 }
 
+export const findTopLevelNode = (
+  node: NodeApi<TreeItem>
+): NodeApi<TreeItem> => {
+  if (node.level === 0) {
+    return node;
+  }
+
+  let currentNode = node;
+  while (currentNode.parent && currentNode.level > 0) {
+    currentNode = currentNode.parent;
+  }
+
+  return currentNode;
+};
+
+export const findSectionFromNode = (node: NodeApi<TreeItem>): string =>
+  findTopLevelNode(node).data.sectionId!;
+
 export const findTopLevelIndex = (
   node: NodeApi,
   relativeIndex?: number

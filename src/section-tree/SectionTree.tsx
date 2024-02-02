@@ -11,7 +11,12 @@ import useResizeObserver from "use-resize-observer";
 import { TreeItem, Section, SectionTreeApi } from "./treeTypes";
 import { HeaderNode } from "./nodes/HeaderNode";
 import { ItemNode } from "./nodes/ItemNode";
-import { findSection, findTopLevelIndex, shouldDisableDrop } from "./treeUtils";
+import {
+  findSection,
+  findSectionFromNode,
+  findTopLevelIndex,
+  shouldDisableDrop,
+} from "./treeUtils";
 import { DropCursor } from "./DropCursor";
 import { Row } from "./Row";
 
@@ -76,16 +81,30 @@ export const SectionTree = React.forwardRef(
           section.children.filter((node) => node.hidden).length ==
             section.children.length && !visibilityEditing;
         const sectionData: TreeItem[] = [
-          { id: "header-" + section.id, name: section.name, type: "header" },
+          {
+            id: "header-" + section.id,
+            name: section.name,
+            type: "header",
+            sectionId: section.id,
+          },
           ...(section.children?.length > 0 && !sectionAllHidden
             ? visibilityEditing == section.id
-              ? section.children
-              : section.children.filter((node) => !node.hidden)
+              ? section.children.map((item) => ({
+                  ...item,
+                  sectionId: section.id,
+                }))
+              : section.children
+                  .filter((node) => !node.hidden)
+                  .map((item) => ({
+                    ...item,
+                    sectionId: section.id,
+                  }))
             : [
                 {
                   id: section.id + "-empty",
                   name: section.emptyMessage,
                   type: "empty" as const,
+                  sectionId: section.id,
                 },
               ]),
         ];
@@ -128,16 +147,7 @@ export const SectionTree = React.forwardRef(
         visibilityEditing;
 
       if (showCheckbox) {
-        const sectionHeaderIndices = node.tree.props.data
-          ?.map((node, i) => (node.type === "header" ? i : -1))
-          .filter((index) => index !== -1);
-        const sectionIndex =
-          findSection(sectionHeaderIndices!, node.childIndex) - 1;
-        const sectionId =
-          node.tree.props.data?.[sectionIndex].id.split("header-")[1];
-        if (!sectionId) {
-          return;
-        }
+        const sectionId = findSectionFromNode(node);
         props.onItemVisibilityChange(sectionId, node.id, !node.data.hidden);
       } else if (!node.isLeaf) {
         node.toggle();
