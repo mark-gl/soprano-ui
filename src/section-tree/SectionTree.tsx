@@ -67,30 +67,32 @@ export const SectionTree = React.forwardRef(
       [props]
     );
 
-    const data = props.sections?.reduce<TreeItem[]>((acc, section, index) => {
-      if (index > 0) {
-        acc.push({ id: "separator-" + index, name: "", type: "separator" });
-      }
-      const sectionAllHidden =
-        section.children.filter((node) => node.hidden).length ==
-          section.children.length && !visibilityEditing;
-      const sectionData: TreeItem[] = [
-        { id: "header-" + section.id, name: section.name, type: "header" },
-        ...(section.children?.length > 0 && !sectionAllHidden
-          ? section.children
-          : [
-              {
-                id: section.id + "-empty",
-                name: section.emptyMessage,
-                type: "empty" as const,
-              },
-            ]),
-      ];
-      return acc.concat(sectionData);
-    }, []);
-    const filteredData = visibilityEditing
-      ? data
-      : data?.filter((node) => !node.hidden);
+    const filteredData = props.sections?.reduce<TreeItem[]>(
+      (acc, section, index) => {
+        if (index > 0) {
+          acc.push({ id: "separator-" + index, name: "", type: "separator" });
+        }
+        const sectionAllHidden =
+          section.children.filter((node) => node.hidden).length ==
+            section.children.length && !visibilityEditing;
+        const sectionData: TreeItem[] = [
+          { id: "header-" + section.id, name: section.name, type: "header" },
+          ...(section.children?.length > 0 && !sectionAllHidden
+            ? visibilityEditing == section.id
+              ? section.children
+              : section.children.filter((node) => !node.hidden)
+            : [
+                {
+                  id: section.id + "-empty",
+                  name: section.emptyMessage,
+                  type: "empty" as const,
+                },
+              ]),
+        ];
+        return acc.concat(sectionData);
+      },
+      []
+    );
 
     useImperativeHandle(
       forwardRef,
@@ -182,7 +184,7 @@ export const SectionTree = React.forwardRef(
             const sectionIndex =
               findSection(sectionHeaderIndices!, topLevelIndex) - 1;
             let adjustedIndex = index;
-            if (!parentNode && data) {
+            if (!parentNode) {
               // If it's top-level, offset the index by the number of items before this section
               adjustedIndex -= sectionHeaderIndices![sectionIndex] + 1;
             }
