@@ -35,13 +35,26 @@ export const SectionTree = React.forwardRef(
         itemId: string,
         hidden: boolean
       ) => void;
+      onVisibilityEditingChange: (sectionId: string | null) => void;
       onOptionsMenuActiveChange: (sectionId: string | null) => void;
     },
     forwardRef: ForwardedRef<SectionTreeApi<TreeItem> | undefined>
   ) => {
     const internalTreeRef = useRef<TreeApi<TreeItem>>(null);
     const { ref, height } = useResizeObserver();
-    const [visibilityEditing, setVisibilityEditing] = useState<boolean>(false);
+
+    const [visibilityEditing, setVisibilityEditing] = useState<string | null>(
+      null
+    );
+
+    const setVisibilityEditingCallback = useCallback(
+      (sectionId: string | null) => {
+        setVisibilityEditing(sectionId);
+        props.onVisibilityEditingChange(sectionId);
+      },
+      [props]
+    );
+
     const [optionsMenuActive, setOptionsMenuActive] = useState<string | null>(
       null
     );
@@ -84,8 +97,8 @@ export const SectionTree = React.forwardRef(
       () => {
         const treeApi = internalTreeRef.current;
         const sectionApi = {
-          setVisibilityEditing: (enabled: boolean) => {
-            setVisibilityEditing(enabled);
+          setVisibilityEditing: (section: string | null) => {
+            setVisibilityEditingCallback(section);
           },
           visibilityEditing,
           setOptionsMenuActive: (section: string | null) => {
@@ -101,6 +114,7 @@ export const SectionTree = React.forwardRef(
         internalTreeRef,
         visibilityEditing,
         optionsMenuActive,
+        setVisibilityEditingCallback,
         setOptionsMenuActiveCallback,
       ]
     );

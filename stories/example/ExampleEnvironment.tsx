@@ -112,17 +112,11 @@ export function ExampleEnvironment(
           onOptionsMenuActiveChange={(sectionId) => {
             console.log("Options menu state changed to ", sectionId);
           }}
+          onVisibilityEditingChange={(sectionId) => {
+            console.log("Visibility editing state changed to ", sectionId);
+          }}
         />
         <div>
-          <button
-            onClick={() =>
-              ref?.current?.setVisibilityEditing(
-                !ref?.current?.visibilityEditing
-              )
-            }
-          >
-            Toggle top-level visibility editing
-          </button>
           <br /> <br />
           {sections.map((section) => (
             <React.Fragment key={section.id}>
@@ -142,6 +136,17 @@ export function ExampleEnvironment(
                 }
               >
                 Toggle options menu for {section.name}
+              </button>
+              <button
+                onClick={() =>
+                  ref?.current?.setVisibilityEditing(
+                    ref?.current?.visibilityEditing == section.id
+                      ? null
+                      : section.id
+                  )
+                }
+              >
+                Toggle visibility editing for {section.name}
               </button>
               <br /> <br />
             </React.Fragment>

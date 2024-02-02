@@ -1,8 +1,8 @@
 import { TreeApi } from "react-arborist";
 
 export interface SectionTreeApi<T> extends TreeApi<T> {
-  visibilityEditing: boolean;
-  setVisibilityEditing: (enabled: boolean) => void;
+  visibilityEditing: string | null;
+  setVisibilityEditing: (section: string | null) => void;
   optionsMenuActive: string | null;
   setOptionsMenuActive: (section: string | null) => void;
 }
