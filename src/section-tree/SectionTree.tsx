@@ -146,14 +146,7 @@ export const SectionTree = React.forwardRef(
               findSection(sectionHeaderIndices!, topLevelIndex) - 1;
             let adjustedIndex = index;
             if (!parentNode && data) {
-              // If it's top-level, offset the index by the number of hidden items before this item
-              if (!visibilityEditing) {
-                adjustedIndex += data
-                  .slice(sectionHeaderIndices![sectionIndex], index)
-                  .filter((node) => node.hidden).length;
-              }
-
-              // Offset the index by the number of items before this section
+              // If it's top-level, offset the index by the number of items before this section
               adjustedIndex -= sectionHeaderIndices![sectionIndex] + 1;
             }
 
