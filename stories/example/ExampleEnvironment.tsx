@@ -75,6 +75,10 @@ export function ExampleEnvironment(
 
   const ref = useRef<SectionTreeApi<TreeItem>>(null);
 
+  const [lastContextMenu, setLastContextMenu] = React.useState<string | null>(
+    null
+  );
+
   return (
     <div style={{ fontFamily: "Segoe UI", height: "500px" }}>
       <Allotment>
@@ -116,6 +120,10 @@ export function ExampleEnvironment(
           onSelectedItemChange={(sectionId, itemId) => {
             console.log("Selected item changed to ", sectionId, itemId);
           }}
+          onItemContextMenu={(sectionId, itemId) => {
+            console.log("Context menu opened for ", sectionId, itemId);
+            setLastContextMenu(itemId);
+          }}
         />
         <div>
           <br /> <br />
@@ -152,6 +160,13 @@ export function ExampleEnvironment(
               <br /> <br />
             </React.Fragment>
           ))}
+          <br /> <br />
+          {lastContextMenu && (
+            <div>
+              Context menu for {lastContextMenu}:<button>Rename</button>
+              <button>Delete</button>
+            </div>
+          )}
         </div>
       </Allotment>
     </div>

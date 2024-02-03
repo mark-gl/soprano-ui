@@ -275,6 +275,7 @@ export const SectionTree = React.forwardRef(
                     onItemVisibilityChange={props.onItemVisibilityChange}
                     onNodeClick={handleNodeClick}
                     selectedItem={selectedItem}
+                    onItemContextMenu={props.onItemContextMenu}
                   />
                 );
             }

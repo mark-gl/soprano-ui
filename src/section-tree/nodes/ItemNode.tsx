@@ -13,6 +13,11 @@ export function ItemNode(
       itemId: string,
       hidden: boolean
     ) => void;
+    onItemContextMenu?: (
+      sectionId: string,
+      itemId: string,
+      event: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ) => void;
     onNodeClick: (node: NodeApi<TreeItem>) => void;
     visibilityEditing: string | null;
     selectedItem: string | null;
@@ -28,6 +33,10 @@ export function ItemNode(
       ref={dragHandle}
       onClick={() => {
         props.onNodeClick(node);
+      }}
+      onContextMenu={(e) => {
+        e.preventDefault();
+        props.onItemContextMenu?.(findSectionFromNode(node), node.id, e);
       }}
     >
       <div
