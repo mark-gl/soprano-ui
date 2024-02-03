@@ -18,17 +18,10 @@ import "allotment/dist/style.css";
 
 export function ExampleEnvironment(
   props: TreeProps<TreeItem> & {
-    sections?: Section[];
     FolderOpenIcon: () => JSX.Element;
     FolderClosedIcon: () => JSX.Element;
     OptionsButtonIcon: () => JSX.Element;
     DoneButtonIcon: () => JSX.Element;
-    onMoveWithinSection: (args: {
-      sectionId: string;
-      movedItemId: string;
-      newParentId: string | null;
-      newIndex: number;
-    }) => void;
   }
 ) {
   const [sections, setSections] = React.useState([

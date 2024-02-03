@@ -7,23 +7,23 @@ export type SectionTreeProps = TreeProps<TreeItem> & {
   FolderClosedIcon: () => JSX.Element;
   OptionsButtonIcon: () => JSX.Element;
   DoneButtonIcon: () => JSX.Element;
-  onMoveWithinSection: (args: {
+  onMoveWithinSection?: (args: {
     sectionId: string;
     movedItemId: string;
     newParentId: string | null;
     newIndex: number;
   }) => void;
-  onItemVisibilityChange: (
+  onItemVisibilityChange?: (
     sectionId: string,
     itemId: string,
     hidden: boolean
   ) => void;
-  onVisibilityEditingChange: (sectionId: string | null) => void;
-  onOptionsMenuActiveChange: (
+  onVisibilityEditingChange?: (sectionId: string | null) => void;
+  onOptionsMenuActiveChange?: (
     sectionId: string | null,
     buttonRef?: React.RefObject<HTMLDivElement>
   ) => void;
-  onSelectedItemChange: (
+  onSelectedItemChange?: (
     sectionId: string | null,
     itemId: string | null
   ) => void;

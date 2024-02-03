@@ -8,7 +8,7 @@ export function ItemNode(
   props: NodeRendererProps<TreeItem> & {
     FolderOpenIcon: () => JSX.Element;
     FolderClosedIcon: () => JSX.Element;
-    onItemVisibilityChange: (
+    onItemVisibilityChange?: (
       sectionId: string,
       itemId: string,
       hidden: boolean

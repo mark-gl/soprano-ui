@@ -37,7 +37,7 @@ export const SectionTree = React.forwardRef(
     const setVisibilityEditingCallback = useCallback(
       (sectionId: string | null) => {
         setVisibilityEditing(sectionId);
-        props.onVisibilityEditingChange(sectionId);
+        props.onVisibilityEditingChange?.(sectionId);
       },
       [props]
     );
@@ -52,7 +52,7 @@ export const SectionTree = React.forwardRef(
         buttonRef: React.RefObject<HTMLDivElement>
       ) => {
         setOptionsMenuActive(sectionId);
-        props.onOptionsMenuActiveChange(sectionId, buttonRef);
+        props.onOptionsMenuActiveChange?.(sectionId, buttonRef);
       },
       [props]
     );
@@ -62,7 +62,7 @@ export const SectionTree = React.forwardRef(
     const setSelectedItemCallback = useCallback(
       (node: NodeApi<TreeItem> | null) => {
         setSelectedItem(node?.id || null);
-        props.onSelectedItemChange(
+        props.onSelectedItemChange?.(
           node ? findSectionFromNode(node) : null,
           node?.id || null
         );
@@ -181,7 +181,7 @@ export const SectionTree = React.forwardRef(
         visibilityEditing == node.data.sectionId
       ) {
         const sectionId = findSectionFromNode(node);
-        props.onItemVisibilityChange(sectionId, node.id, !node.data.hidden);
+        props.onItemVisibilityChange?.(sectionId, node.id, !node.data.hidden);
       } else if (!node.isLeaf) {
         node.toggle();
       } else {
@@ -234,7 +234,7 @@ export const SectionTree = React.forwardRef(
               adjustedIndex -= sectionHeaderIndices![sectionIndex] + 1;
             }
 
-            props.onMoveWithinSection({
+            props.onMoveWithinSection?.({
               sectionId: props.sections[sectionIndex].id,
               movedItemId: dragNode.id,
               newParentId: parentId,
