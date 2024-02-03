@@ -141,12 +141,7 @@ export const SectionTree = React.forwardRef(
     );
 
     const handleNodeClick = (node: NodeApi<TreeItem>) => {
-      const showCheckbox =
-        node.data.hidden != undefined &&
-        node.parent?.level == -1 &&
-        visibilityEditing;
-
-      if (showCheckbox) {
+      if (node.parent?.level == -1 && visibilityEditing) {
         const sectionId = findSectionFromNode(node);
         props.onItemVisibilityChange(sectionId, node.id, !node.data.hidden);
       } else if (!node.isLeaf) {
