@@ -19,6 +19,7 @@ import {
 } from "./treeUtils";
 import { DropCursor } from "./DropCursor";
 import { Row } from "./Row";
+import { DragPreview } from "./DragPreview";
 
 import styles from "./SectionTree.module.css";
 
@@ -211,6 +212,9 @@ export const SectionTree = React.forwardRef(
           openByDefault={false}
           className={styles.tree}
           renderCursor={DropCursor}
+          renderDragPreview={(previewProps) => (
+            <DragPreview {...previewProps} treeRef={internalTreeRef} />
+          )}
           renderRow={(rowProps) => (
             <Row
               {...rowProps}
