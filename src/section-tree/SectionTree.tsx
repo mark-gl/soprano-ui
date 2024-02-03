@@ -77,7 +77,7 @@ export const SectionTree = React.forwardRef(
         }
         const sectionAllHidden =
           section.children.filter((node) => node.hidden).length ==
-            section.children.length && !visibilityEditing;
+            section.children.length && visibilityEditing != section.id;
         const sectionData: TreeItem[] = [
           {
             id: "header-" + section.id,
