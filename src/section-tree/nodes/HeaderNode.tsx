@@ -6,11 +6,15 @@ import styles from "./HeaderNode.module.css";
 export function HeaderNode(
   props: NodeRendererProps<TreeItem> & {
     OptionsButtonIcon: () => JSX.Element;
+    DoneButtonIcon: () => JSX.Element;
     optionsMenuActive: string | null;
     setOptionsMenuActive: (section: string | null) => void;
+    visibilityEditing: string | null;
+    setVisibilityEditing: (section: string | null) => void;
   }
 ) {
   const { node, style, dragHandle } = props;
+  const sectionEditing = node.data.sectionId == props.visibilityEditing;
   return (
     <div style={style} ref={dragHandle}>
       <div className={`${treeStyles.node} ${styles.header}`}>
@@ -22,6 +26,10 @@ export function HeaderNode(
               : ""
           }`}
           onClick={() => {
+            if (sectionEditing) {
+              props.setVisibilityEditing(null);
+              return;
+            }
             props.setOptionsMenuActive(
               props.optionsMenuActive == node.data.sectionId!
                 ? null
@@ -29,7 +37,11 @@ export function HeaderNode(
             );
           }}
         >
-          <props.OptionsButtonIcon />
+          {sectionEditing ? (
+            <props.DoneButtonIcon />
+          ) : (
+            <props.OptionsButtonIcon />
+          )}
         </div>
       </div>
     </div>

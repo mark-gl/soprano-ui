@@ -22,6 +22,7 @@ export function ExampleEnvironment(
     FolderOpenIcon: () => JSX.Element;
     FolderClosedIcon: () => JSX.Element;
     OptionsButtonIcon: () => JSX.Element;
+    DoneButtonIcon: () => JSX.Element;
     onMoveWithinSection: (args: {
       sectionId: string;
       movedItemId: string;

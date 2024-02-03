@@ -29,6 +29,7 @@ export const SectionTree = React.forwardRef(
       FolderOpenIcon: () => JSX.Element;
       FolderClosedIcon: () => JSX.Element;
       OptionsButtonIcon: () => JSX.Element;
+      DoneButtonIcon: () => JSX.Element;
       onMoveWithinSection: (args: {
         sectionId: string;
         movedItemId: string;
@@ -209,8 +210,11 @@ export const SectionTree = React.forwardRef(
                   <HeaderNode
                     {...nodeProps}
                     OptionsButtonIcon={props.OptionsButtonIcon}
+                    DoneButtonIcon={props.DoneButtonIcon}
                     optionsMenuActive={optionsMenuActive}
                     setOptionsMenuActive={setOptionsMenuActiveCallback}
+                    visibilityEditing={visibilityEditing}
+                    setVisibilityEditing={setVisibilityEditingCallback}
                   />
                 );
               case "separator":
