@@ -171,24 +171,18 @@ export const SectionTree = React.forwardRef(
     }, [setVisibilityEditingCallback, visibilityEditing]);
 
     const handleNodeClick = (node: NodeApi<TreeItem>) => {
+      const sectionId = findSectionFromNode(node);
       if (node.data.type == "header") {
-        if (visibilityEditing == node.data.sectionId!) {
+        if (visibilityEditing == sectionId) {
           setVisibilityEditing(null);
           return;
         }
-        setOptionsMenuActive(
-          optionsMenuActive == node.data.sectionId!
-            ? null
-            : node.data.sectionId!
-        );
-      } else if (
-        node.parent?.level == -1 &&
-        visibilityEditing == node.data.sectionId
-      ) {
-        const sectionId = findSectionFromNode(node);
+        setOptionsMenuActive(optionsMenuActive == sectionId ? null : sectionId);
+      } else if (node.parent?.level == -1 && visibilityEditing == sectionId) {
         props.onItemVisibilityChange?.(sectionId, node.id, !node.data.hidden);
       } else if (!node.isLeaf) {
         node.toggle();
+        props.onFolderAction?.(sectionId, node.id, node.isOpen);
       } else {
         setSelectedItemCallback(node);
       }
@@ -203,6 +197,7 @@ export const SectionTree = React.forwardRef(
           width={"100%"}
           height={height}
           rowHeight={36}
+          openByDefault={false}
           className={styles.tree}
           renderCursor={DropCursor}
           renderRow={(rowProps) => (

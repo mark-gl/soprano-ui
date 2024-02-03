@@ -88,6 +88,9 @@ export function ExampleEnvironment(
           {...props}
           ref={ref}
           sections={sections}
+          initialOpenState={{
+            b: true,
+          }}
           onMoveWithinSection={(args) => {
             const sectionIndex = sections.findIndex(
               (section) => section.id === args.sectionId
@@ -144,6 +147,9 @@ export function ExampleEnvironment(
             if (e.key === " ") {
               e.stopPropagation();
             }
+          }}
+          onFolderAction={(sectionId, itemId, action) => {
+            console.log("Folder open: ", sectionId, itemId, action);
           }}
         />
         <div>
