@@ -21,7 +21,6 @@ export function ItemNode(
     ) => void;
     onNodeClick: (node: NodeApi<TreeItem>) => void;
     visibilityEditing: string | null;
-    selectedItem: string | null;
     onRenameWithinSection?: (
       sectionId: string,
       itemId: string,
@@ -84,7 +83,7 @@ export function ItemNode(
     >
       <div
         className={`${treeStyles.node} ${styles.item} 
-        ${props.selectedItem == node.id ? styles.selected : ""}
+        ${node.tree.selectedNodes[0]?.id == node.id ? styles.selected : ""}
         ${node.isEditing ? styles.editing : styles.itemText}`}
       >
         {node.isEditing ? (

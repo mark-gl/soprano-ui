@@ -157,6 +157,13 @@ export function ExampleEnvironment(
           }}
         />
         <div>
+          <button
+            onClick={() => {
+              ref?.current?.setSelectedItem(null);
+            }}
+          >
+            Clear selection
+          </button>
           <br /> <br />
           {sections.map((section) => (
             <React.Fragment key={section.id}>

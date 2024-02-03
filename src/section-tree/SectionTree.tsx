@@ -57,19 +57,6 @@ export const SectionTree = React.forwardRef(
       [props]
     );
 
-    const [selectedItem, setSelectedItem] = useState<string | null>(null);
-
-    const setSelectedItemCallback = useCallback(
-      (node: NodeApi<TreeItem> | null) => {
-        setSelectedItem(node?.id || null);
-        props.onSelectedItemChange?.(
-          node ? findSectionFromNode(node) : null,
-          node?.id || null
-        );
-      },
-      [props]
-    );
-
     const filteredData = props.sections?.reduce<TreeItem[]>(
       (acc, section, index) => {
         if (index > 0) {
@@ -121,10 +108,10 @@ export const SectionTree = React.forwardRef(
       () => {
         const treeApi = internalTreeRef.current;
         const sectionApi = {
+          visibilityEditing,
           setVisibilityEditing: (section: string | null) => {
             setVisibilityEditingCallback(section);
           },
-          visibilityEditing,
           setOptionsMenuActive: (
             section: string | null,
             buttonRef: React.RefObject<HTMLDivElement>
@@ -132,6 +119,15 @@ export const SectionTree = React.forwardRef(
             setOptionsMenuActiveCallback(section, buttonRef);
           },
           optionsMenuActive,
+          setSelectedItem: (itemId: string) => {
+            const node = treeApi?.root.tree.get(itemId);
+            if (node) {
+              node.tree.select(itemId);
+            } else {
+              treeApi?.root.tree.deselectAll();
+            }
+          },
+          selectedItem: treeApi?.selectedNodes[0]?.id,
         };
         return (
           treeApi ? { ...treeApi, ...sectionApi } : sectionApi
@@ -199,7 +195,7 @@ export const SectionTree = React.forwardRef(
         node.toggle();
         props.onFolderAction?.(sectionId, node.id, node.isOpen);
       } else {
-        setSelectedItemCallback(node);
+        node.tree.select(node.id);
       }
     };
 
@@ -294,7 +290,6 @@ export const SectionTree = React.forwardRef(
                     visibilityEditing={visibilityEditing}
                     onItemVisibilityChange={props.onItemVisibilityChange}
                     onNodeClick={handleNodeClick}
-                    selectedItem={selectedItem}
                     onItemContextMenu={props.onItemContextMenu}
                     onRenameWithinSection={props.onRenameWithinSection}
                   />
