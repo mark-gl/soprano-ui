@@ -10,3 +10,10 @@ export {
   moveTreeNode,
   updateTreeNode,
 } from "./section-tree/treeOperations";
+
+export type {
+  SectionTreeProps,
+  SectionTreeApi,
+  Item,
+  Section,
+} from "./section-tree/treeTypes";
