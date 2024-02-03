@@ -73,7 +73,12 @@ export const SectionTree = React.forwardRef(
     const filteredData = props.sections?.reduce<TreeItem[]>(
       (acc, section, index) => {
         if (index > 0) {
-          acc.push({ id: "separator-" + index, name: "", type: "separator" });
+          acc.push({
+            id: "separator-" + index,
+            name: "",
+            type: "separator",
+            sectionId: props.sections?.[index - 1].id,
+          });
         }
         const sectionAllHidden =
           section.children.filter((node) => node.hidden).length ==
@@ -201,7 +206,11 @@ export const SectionTree = React.forwardRef(
           className={styles.tree}
           renderCursor={DropCursor}
           renderRow={(rowProps) => (
-            <Row {...rowProps} onNodeClick={handleNodeClick} />
+            <Row
+              {...rowProps}
+              onNodeClick={handleNodeClick}
+              onSectionContextMenu={props.onSectionContextMenu}
+            />
           )}
           disableDrag={(node) =>
             node.type === "separator" || node.type === "header"

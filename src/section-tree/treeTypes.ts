@@ -37,6 +37,7 @@ export type SectionTreeProps = TreeProps<TreeItem> & {
     itemId: string,
     event: React.MouseEvent
   ) => void;
+  onSectionContextMenu?: (sectionId: string, event: React.MouseEvent) => void;
 };
 
 export interface SectionTreeApi<T> extends TreeApi<T> {

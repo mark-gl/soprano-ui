@@ -73,6 +73,7 @@ export function ItemNode(
       }}
       onContextMenu={(e) => {
         e.preventDefault();
+        e.stopPropagation();
         props.onItemContextMenu?.(findSectionFromNode(node), node.id, e);
       }}
       onDragStart={(e) => {

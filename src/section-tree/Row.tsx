@@ -8,9 +8,12 @@ export function Row({
   innerRef,
   children,
   onNodeClick,
+  onSectionContextMenu,
 }: RowRendererProps<TreeItem> & {
   onNodeClick: (node: NodeApi<TreeItem>) => void;
+  onSectionContextMenu?: (section: string, e: React.MouseEvent) => void;
 }) {
+  const section = findSectionFromNode(node);
   const adjustedAttrs = { ...attrs };
   if (node.data.type === "separator") {
     adjustedAttrs.role = "separator";
@@ -39,7 +42,10 @@ export function Row({
             onNodeClick(node);
           }
         }}
-        data-section={findSectionFromNode(node)}
+        onContextMenu={(e) => {
+          onSectionContextMenu?.(section, e);
+        }}
+        data-section={section}
       >
         {children}
       </div>

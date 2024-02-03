@@ -136,6 +136,10 @@ export function ExampleEnvironment(
             console.log("Context menu opened for ", sectionId, itemId);
             setLastContextMenu({ sectionId, itemId });
           }}
+          onSectionContextMenu={(sectionId, e) => {
+            console.log("Section context menu opened for ", sectionId);
+            e.preventDefault();
+          }}
         />
         <div>
           <br /> <br />
