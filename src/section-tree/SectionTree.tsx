@@ -44,7 +44,7 @@ export const SectionTree = React.forwardRef(
       onVisibilityEditingChange: (sectionId: string | null) => void;
       onOptionsMenuActiveChange: (
         sectionId: string | null,
-        buttonRef: React.RefObject<HTMLDivElement>
+        buttonRef?: React.RefObject<HTMLDivElement>
       ) => void;
     },
     forwardRef: ForwardedRef<SectionTreeApi<TreeItem> | undefined>
@@ -151,6 +151,17 @@ export const SectionTree = React.forwardRef(
     );
 
     const handleNodeClick = (node: NodeApi<TreeItem>) => {
+      if (node.data.type == "header") {
+        if (visibilityEditing == node.data.sectionId!) {
+          setVisibilityEditing(null);
+          return;
+        }
+        setOptionsMenuActive(
+          optionsMenuActive == node.data.sectionId!
+            ? null
+            : node.data.sectionId!
+        );
+      }
       if (node.parent?.level == -1 && visibilityEditing) {
         const sectionId = findSectionFromNode(node);
         props.onItemVisibilityChange(sectionId, node.id, !node.data.hidden);
@@ -221,9 +232,8 @@ export const SectionTree = React.forwardRef(
                     OptionsButtonIcon={props.OptionsButtonIcon}
                     DoneButtonIcon={props.DoneButtonIcon}
                     optionsMenuActive={optionsMenuActive}
-                    setOptionsMenuActive={setOptionsMenuActiveCallback}
                     visibilityEditing={visibilityEditing}
-                    setVisibilityEditing={setVisibilityEditingCallback}
+                    onNodeClick={handleNodeClick}
                   />
                 );
               case "separator":

@@ -114,7 +114,7 @@ export function ExampleEnvironment(
             console.log("Options menu state changed to ", sectionId);
             console.log(
               "Button position: ",
-              button.current?.getBoundingClientRect()
+              button?.current?.getBoundingClientRect()
             );
           }}
           onVisibilityEditingChange={(sectionId) => {

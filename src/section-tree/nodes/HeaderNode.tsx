@@ -1,4 +1,4 @@
-import { NodeRendererProps } from "react-arborist";
+import { NodeApi, NodeRendererProps } from "react-arborist";
 import { TreeItem } from "../treeTypes";
 import treeStyles from "../SectionTree.module.css";
 import styles from "./HeaderNode.module.css";
@@ -9,12 +9,8 @@ export function HeaderNode(
     OptionsButtonIcon: () => JSX.Element;
     DoneButtonIcon: () => JSX.Element;
     optionsMenuActive: string | null;
-    setOptionsMenuActive: (
-      section: string | null,
-      buttonRef: React.RefObject<HTMLDivElement>
-    ) => void;
     visibilityEditing: string | null;
-    setVisibilityEditing: (section: string | null) => void;
+    onNodeClick: (node: NodeApi<TreeItem>) => void;
   }
 ) {
   const optionsButtonRef = useRef<HTMLDivElement>(null);
@@ -32,16 +28,7 @@ export function HeaderNode(
               : ""
           }`}
           onClick={() => {
-            if (sectionEditing) {
-              props.setVisibilityEditing(null);
-              return;
-            }
-            props.setOptionsMenuActive(
-              props.optionsMenuActive == node.data.sectionId!
-                ? null
-                : node.data.sectionId!,
-              optionsButtonRef
-            );
+            props.onNodeClick(node);
           }}
         >
           {sectionEditing ? (
