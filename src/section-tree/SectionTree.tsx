@@ -203,7 +203,10 @@ export const SectionTree = React.forwardRef(
             ? null
             : node.data.sectionId!
         );
-      } else if (node.parent?.level == -1 && visibilityEditing) {
+      } else if (
+        node.parent?.level == -1 &&
+        visibilityEditing == node.data.sectionId
+      ) {
         const sectionId = findSectionFromNode(node);
         props.onItemVisibilityChange(sectionId, node.id, !node.data.hidden);
       } else if (!node.isLeaf) {
