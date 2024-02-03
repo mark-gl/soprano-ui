@@ -110,8 +110,12 @@ export function ExampleEnvironment(
             });
             updateSection(sections[sectionIndex].id, newTree);
           }}
-          onOptionsMenuActiveChange={(sectionId) => {
+          onOptionsMenuActiveChange={(sectionId, button) => {
             console.log("Options menu state changed to ", sectionId);
+            console.log(
+              "Button position: ",
+              button.current?.getBoundingClientRect()
+            );
           }}
           onVisibilityEditingChange={(sectionId) => {
             console.log("Visibility editing state changed to ", sectionId);

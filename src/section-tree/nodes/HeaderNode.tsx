@@ -2,17 +2,22 @@ import { NodeRendererProps } from "react-arborist";
 import { TreeItem } from "../treeTypes";
 import treeStyles from "../SectionTree.module.css";
 import styles from "./HeaderNode.module.css";
+import { useRef } from "react";
 
 export function HeaderNode(
   props: NodeRendererProps<TreeItem> & {
     OptionsButtonIcon: () => JSX.Element;
     DoneButtonIcon: () => JSX.Element;
     optionsMenuActive: string | null;
-    setOptionsMenuActive: (section: string | null) => void;
+    setOptionsMenuActive: (
+      section: string | null,
+      buttonRef: React.RefObject<HTMLDivElement>
+    ) => void;
     visibilityEditing: string | null;
     setVisibilityEditing: (section: string | null) => void;
   }
 ) {
+  const optionsButtonRef = useRef<HTMLDivElement>(null);
   const { node, style, dragHandle } = props;
   const sectionEditing = node.data.sectionId == props.visibilityEditing;
   return (
@@ -20,6 +25,7 @@ export function HeaderNode(
       <div className={`${treeStyles.node} ${styles.header}`}>
         <div className={styles.headerText}>{node.data.name}</div>
         <div
+          ref={optionsButtonRef}
           className={`${styles.optionsButton} ${
             props.optionsMenuActive == node.data.sectionId
               ? styles.optionsButtonActive
@@ -33,7 +39,8 @@ export function HeaderNode(
             props.setOptionsMenuActive(
               props.optionsMenuActive == node.data.sectionId!
                 ? null
-                : node.data.sectionId!
+                : node.data.sectionId!,
+              optionsButtonRef
             );
           }}
         >
