@@ -1,6 +1,7 @@
 import React, {
   ForwardedRef,
   useCallback,
+  useEffect,
   useImperativeHandle,
   useRef,
   useState,
@@ -149,6 +150,30 @@ export const SectionTree = React.forwardRef(
         setOptionsMenuActiveCallback,
       ]
     );
+
+    useEffect(() => {
+      let checkClickOutside = false;
+
+      const handleDocumentClick = (event: MouseEvent) => {
+        if (!visibilityEditing) return;
+        if (!checkClickOutside) {
+          checkClickOutside = true;
+          return;
+        }
+
+        const target = event.target as HTMLElement;
+        if (!target.closest(`[data-section="${visibilityEditing}"]`)) {
+          setVisibilityEditingCallback(null);
+        }
+
+        checkClickOutside = false;
+      };
+
+      document.addEventListener("click", handleDocumentClick);
+      return () => {
+        document.removeEventListener("click", handleDocumentClick);
+      };
+    }, [setVisibilityEditingCallback, visibilityEditing]);
 
     const handleNodeClick = (node: NodeApi<TreeItem>) => {
       if (node.data.type == "header") {

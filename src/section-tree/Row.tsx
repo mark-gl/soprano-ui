@@ -1,5 +1,6 @@
 import { NodeApi, RowRendererProps } from "react-arborist";
 import { TreeItem } from "./treeTypes";
+import { findSectionFromNode } from "./treeUtils";
 
 export function Row({
   node,
@@ -38,6 +39,7 @@ export function Row({
             onNodeClick(node);
           }
         }}
+        data-section={findSectionFromNode(node)}
       >
         {children}
       </div>
