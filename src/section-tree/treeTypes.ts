@@ -13,6 +13,11 @@ export type SectionTreeProps = TreeProps<TreeItem> & {
     newParentId: string | null;
     newIndex: number;
   }) => void;
+  onRenameWithinSection?: (
+    sectionId: string,
+    renamedItemId: string,
+    newName: string
+  ) => void;
   onItemVisibilityChange?: (
     sectionId: string,
     itemId: string,

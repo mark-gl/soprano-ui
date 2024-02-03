@@ -11,6 +11,7 @@ import {
 } from "../../src/section-tree/treeTypes";
 import {
   createTreeNode,
+  deleteTreeNode,
   moveTreeNode,
   updateTreeNode,
 } from "../../src/section-tree/treeOperations";
@@ -75,9 +76,10 @@ export function ExampleEnvironment(
 
   const ref = useRef<SectionTreeApi<TreeItem>>(null);
 
-  const [lastContextMenu, setLastContextMenu] = React.useState<string | null>(
-    null
-  );
+  const [lastContextMenu, setLastContextMenu] = React.useState<{
+    itemId: string;
+    sectionId: string;
+  } | null>(null);
 
   return (
     <div style={{ fontFamily: "Segoe UI", height: "500px" }}>
@@ -96,6 +98,16 @@ export function ExampleEnvironment(
               index: args.newIndex,
             });
             updateSection(args.sectionId, newTree);
+          }}
+          onRenameWithinSection={(sectionId, itemId, newName) => {
+            const sectionIndex = sections.findIndex(
+              (section) => section.id === sectionId
+            );
+            const newTree = updateTreeNode(sections[sectionIndex].children, {
+              id: itemId,
+              changes: { name: newName },
+            });
+            updateSection(sectionId, newTree);
           }}
           onItemVisibilityChange={(sectionId, itemId, hidden) => {
             const sectionIndex = sections.findIndex(
@@ -122,7 +134,7 @@ export function ExampleEnvironment(
           }}
           onItemContextMenu={(sectionId, itemId) => {
             console.log("Context menu opened for ", sectionId, itemId);
-            setLastContextMenu(itemId);
+            setLastContextMenu({ sectionId, itemId });
           }}
         />
         <div>
@@ -163,8 +175,29 @@ export function ExampleEnvironment(
           <br /> <br />
           {lastContextMenu && (
             <div>
-              Context menu for {lastContextMenu}:<button>Rename</button>
-              <button>Delete</button>
+              Context menu for {lastContextMenu.itemId}:
+              <button
+                onClick={() => {
+                  ref.current?.root.tree.edit(lastContextMenu.itemId);
+                }}
+              >
+                Rename
+              </button>
+              <button
+                onClick={() => {
+                  const sectionIndex = sections.findIndex(
+                    (section) => section.id === lastContextMenu.sectionId
+                  );
+                  const newTree = deleteTreeNode(
+                    sections[sectionIndex].children,
+                    { id: lastContextMenu.itemId }
+                  );
+                  updateSection(lastContextMenu.sectionId, newTree);
+                  setLastContextMenu(null);
+                }}
+              >
+                Delete
+              </button>
             </div>
           )}
         </div>

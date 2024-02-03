@@ -276,6 +276,7 @@ export const SectionTree = React.forwardRef(
                     onNodeClick={handleNodeClick}
                     selectedItem={selectedItem}
                     onItemContextMenu={props.onItemContextMenu}
+                    onRenameWithinSection={props.onRenameWithinSection}
                   />
                 );
             }

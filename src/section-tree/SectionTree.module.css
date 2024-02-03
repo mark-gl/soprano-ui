@@ -10,6 +10,8 @@
   --tree-item-border-radius: 0.25rem;
   --tree-empty-text: #999;
   --tree-drop-cursor-color: #4c9de4;
+  --tree-item-editing-text: #0f0f0f;
+  --tree-item-editing-background: #f7f7f7;
 }
 
 .treeContainer {

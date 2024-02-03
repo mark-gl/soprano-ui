@@ -3,6 +3,7 @@ import { TreeItem } from "../treeTypes";
 import treeStyles from "../SectionTree.module.css";
 import styles from "./ItemNode.module.css";
 import { findSectionFromNode } from "../treeUtils";
+import { useRef, useEffect } from "react";
 
 export function ItemNode(
   props: NodeRendererProps<TreeItem> & {
@@ -21,11 +22,47 @@ export function ItemNode(
     onNodeClick: (node: NodeApi<TreeItem>) => void;
     visibilityEditing: string | null;
     selectedItem: string | null;
+    onRenameWithinSection?: (
+      sectionId: string,
+      itemId: string,
+      newName: string
+    ) => void;
   }
 ) {
   const { node, style, dragHandle } = props;
   const showCheckbox =
     node.level == 0 && props.visibilityEditing == findSectionFromNode(node);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current && node.isEditing) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (inputRef.current) {
+        if (!inputRef.current.contains(event.target as Node)) {
+          props.onRenameWithinSection?.(
+            findSectionFromNode(node),
+            node.id,
+            inputRef.current!.value
+          );
+          node.reset();
+        } else {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside, true);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
+  }, [props, node]);
 
   return (
     <div
@@ -38,25 +75,62 @@ export function ItemNode(
         e.preventDefault();
         props.onItemContextMenu?.(findSectionFromNode(node), node.id, e);
       }}
+      onDragStart={(e) => {
+        if (node.isEditing) {
+          e.preventDefault();
+        }
+      }}
     >
       <div
-        className={`${treeStyles.node} ${styles.item} ${
-          props.selectedItem == node.id ? styles.selected : ""
-        }`}
+        className={`${treeStyles.node} ${styles.item} 
+        ${props.selectedItem == node.id ? styles.selected : ""}
+        ${node.isEditing ? styles.editing : styles.itemText}`}
       >
-        {!node.isLeaf && (
-          <div className={styles.folderIcon}>
-            {node.isOpen ? (
-              <props.FolderOpenIcon />
-            ) : (
-              <props.FolderClosedIcon />
+        {node.isEditing ? (
+          <input
+            className={styles.input}
+            type="text"
+            defaultValue={node.data.name}
+            ref={inputRef}
+            onKeyDown={(e) => {
+              if (e.key == "Enter") {
+                props.onRenameWithinSection?.(
+                  findSectionFromNode(node),
+                  node.id,
+                  inputRef.current!.value
+                );
+                node.reset();
+                e.stopPropagation();
+                node.focus();
+              }
+              if ((e.ctrlKey && e.key == "a") || e.key == " ") {
+                e.stopPropagation();
+              }
+            }}
+            onMouseDown={(e) => {
+              e.stopPropagation();
+            }}
+            onDragStart={(e) => {
+              e.stopPropagation();
+            }}
+          />
+        ) : (
+          <>
+            {!node.isLeaf && (
+              <div className={styles.folderIcon}>
+                {node.isOpen ? (
+                  <props.FolderOpenIcon />
+                ) : (
+                  <props.FolderClosedIcon />
+                )}
+              </div>
             )}
-          </div>
+            {showCheckbox && (
+              <input type="checkbox" checked={!node.data.hidden} readOnly />
+            )}
+            <span className={styles.itemText}>{node.data.name}</span>
+          </>
         )}
-        {showCheckbox && (
-          <input type="checkbox" checked={!node.data.hidden} readOnly />
-        )}
-        {node.data.name}
       </div>
     </div>
   );
