@@ -1,7 +1,7 @@
 import { TreeApi } from "react-arborist";
 import { TreeProps } from "react-arborist/dist/module/types/tree-props";
 
-export type SectionTreeProps = TreeProps<TreeItem> & {
+export type SectionTreeProps = TreeProps<SectionTreeItem> & {
   sections?: Section[];
   FolderOpenIcon: () => JSX.Element;
   FolderClosedIcon: () => JSX.Element;
@@ -66,7 +66,7 @@ export type Section = {
   children: Item[];
 };
 
-export type TreeItem = Item & {
+export type SectionTreeItem = Item & {
   type?: "separator" | "header" | "empty";
   sectionId?: string;
 };

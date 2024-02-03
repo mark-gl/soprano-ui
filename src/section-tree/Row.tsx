@@ -1,5 +1,5 @@
 import { NodeApi, RowRendererProps } from "react-arborist";
-import { TreeItem } from "./treeTypes";
+import { SectionTreeItem } from "./treeTypes";
 import { findSectionFromNode } from "./treeUtils";
 
 export function Row({
@@ -10,8 +10,8 @@ export function Row({
   onNodeClick,
   onSectionContextMenu,
   onRowKeyDown,
-}: RowRendererProps<TreeItem> & {
-  onNodeClick: (node: NodeApi<TreeItem>) => void;
+}: RowRendererProps<SectionTreeItem> & {
+  onNodeClick: (node: NodeApi<SectionTreeItem>) => void;
   onSectionContextMenu?: (section: string, e: React.MouseEvent) => void;
   onRowKeyDown?: (e: React.KeyboardEvent) => void;
 }) {

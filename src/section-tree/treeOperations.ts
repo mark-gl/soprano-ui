@@ -1,10 +1,10 @@
-import { TreeItem } from "./treeTypes";
+import { SectionTreeItem } from "./treeTypes";
 import { findNode, findParentNode } from "./treeUtils";
 
 export function createTreeNode(
-  data: TreeItem[],
-  args: { newData: TreeItem; parentId?: string; index?: number }
-): TreeItem[] {
+  data: SectionTreeItem[],
+  args: { newData: SectionTreeItem; parentId?: string; index?: number }
+): SectionTreeItem[] {
   if (!args.parentId) {
     data.splice(args.index ?? data.length, 0, args.newData);
     return data;
@@ -24,9 +24,9 @@ export function createTreeNode(
 }
 
 export function moveTreeNode(
-  data: TreeItem[],
+  data: SectionTreeItem[],
   args: { id: string; parentId: string | null; index: number }
-): TreeItem[] {
+): SectionTreeItem[] {
   const nodeToRemove = findNode(data, args.id);
   if (!nodeToRemove) return data;
 
@@ -56,15 +56,15 @@ export function moveTreeNode(
 }
 
 export function deleteTreeNode(
-  data: TreeItem[],
+  data: SectionTreeItem[],
   args: { id: string }
-): { result: TreeItem[]; deletedIds: string[] } {
+): { result: SectionTreeItem[]; deletedIds: string[] } {
   let deletedIds: string[] = [];
 
-  const result = data.reduce<TreeItem[]>((acc, item) => {
+  const result = data.reduce<SectionTreeItem[]>((acc, item) => {
     if (item.id === args.id) {
       deletedIds.push(item.id);
-      const addChildIdsToDeleted = (item: TreeItem) => {
+      const addChildIdsToDeleted = (item: SectionTreeItem) => {
         if (item.children) {
           item.children.forEach((child) => {
             deletedIds.push(child.id);
@@ -90,9 +90,9 @@ export function deleteTreeNode(
 }
 
 export function updateTreeNode(
-  data: TreeItem[],
-  args: { id: string; changes: Partial<TreeItem> }
-): TreeItem[] {
+  data: SectionTreeItem[],
+  args: { id: string; changes: Partial<SectionTreeItem> }
+): SectionTreeItem[] {
   return data.map((item) => {
     if (item.id === args.id) {
       return { ...item, ...args.changes };

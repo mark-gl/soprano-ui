@@ -1,7 +1,7 @@
 import { NodeApi } from "react-arborist";
-import { TreeItem } from "./treeTypes";
+import { SectionTreeItem } from "./treeTypes";
 
-export function findNode(data: TreeItem[], id: string): TreeItem | undefined {
+export function findNode(data: SectionTreeItem[], id: string): SectionTreeItem | undefined {
   for (const item of data) {
     if (item.id === id) return item;
     const found = item.children && findNode(item.children, id);
@@ -10,9 +10,9 @@ export function findNode(data: TreeItem[], id: string): TreeItem | undefined {
 }
 
 export function findParentNode(
-  data: TreeItem[],
+  data: SectionTreeItem[],
   childId: string
-): TreeItem | null {
+): SectionTreeItem | null {
   for (const item of data) {
     if (item.children?.some((child) => child.id === childId)) {
       return item;
@@ -24,8 +24,8 @@ export function findParentNode(
 }
 
 export const findTopLevelNode = (
-  node: NodeApi<TreeItem>
-): NodeApi<TreeItem> => {
+  node: NodeApi<SectionTreeItem>
+): NodeApi<SectionTreeItem> => {
   if (node.level === 0) {
     return node;
   }
@@ -38,7 +38,7 @@ export const findTopLevelNode = (
   return currentNode;
 };
 
-export const findSectionFromNode = (node: NodeApi<TreeItem>): string =>
+export const findSectionFromNode = (node: NodeApi<SectionTreeItem>): string =>
   findTopLevelNode(node).data.sectionId!;
 
 export const findTopLevelIndex = (
@@ -70,8 +70,8 @@ export const findSection = (
 };
 
 export const shouldDisableDrop = (
-  sourceNode: NodeApi<TreeItem>,
-  destinationParentNode: NodeApi<TreeItem>,
+  sourceNode: NodeApi<SectionTreeItem>,
+  destinationParentNode: NodeApi<SectionTreeItem>,
   destinationRelativeIndex: number
 ): boolean => {
   if (!sourceNode) return true;

@@ -1,12 +1,12 @@
 import { NodeApi, NodeRendererProps } from "react-arborist";
-import { TreeItem } from "../treeTypes";
+import { SectionTreeItem } from "../treeTypes";
 import treeStyles from "../SectionTree.module.css";
 import styles from "./ItemNode.module.css";
 import { findSectionFromNode } from "../treeUtils";
 import { useRef, useEffect } from "react";
 
 export function ItemNode(
-  props: NodeRendererProps<TreeItem> & {
+  props: NodeRendererProps<SectionTreeItem> & {
     FolderOpenIcon: () => JSX.Element;
     FolderClosedIcon: () => JSX.Element;
     onItemVisibilityChange?: (
@@ -19,7 +19,7 @@ export function ItemNode(
       itemId: string,
       event: React.MouseEvent<HTMLDivElement, MouseEvent>
     ) => void;
-    onNodeClick: (node: NodeApi<TreeItem>) => void;
+    onNodeClick: (node: NodeApi<SectionTreeItem>) => void;
     visibilityEditing: string | null;
     onRenameWithinSection?: (
       sectionId: string,

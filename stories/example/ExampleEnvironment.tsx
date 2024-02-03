@@ -5,7 +5,7 @@ import views from "../data/views.json";
 import playlists from "../data/playlists.json";
 import { TreeProps } from "react-arborist/dist/module/types/tree-props";
 import {
-  TreeItem,
+  SectionTreeItem,
   Section,
   SectionTreeApi,
 } from "../../src/section-tree/treeTypes";
@@ -18,7 +18,7 @@ import {
 import "allotment/dist/style.css";
 
 export function ExampleEnvironment(
-  props: TreeProps<TreeItem> & {
+  props: TreeProps<SectionTreeItem> & {
     FolderOpenIcon: () => JSX.Element;
     FolderClosedIcon: () => JSX.Element;
     OptionsButtonIcon: () => JSX.Element;
@@ -30,13 +30,13 @@ export function ExampleEnvironment(
       id: "views",
       name: "Library",
       emptyMessage: "No views enabled",
-      children: views as TreeItem[],
+      children: views as SectionTreeItem[],
     },
     {
       id: "playlists",
       name: "Playlists",
       emptyMessage: "No playlists",
-      children: playlists as TreeItem[],
+      children: playlists as SectionTreeItem[],
     },
     {
       id: "empty",
@@ -46,7 +46,7 @@ export function ExampleEnvironment(
     },
   ]);
 
-  const updateSection = (sectionId: string, newData: TreeItem[]) => {
+  const updateSection = (sectionId: string, newData: SectionTreeItem[]) => {
     setSections(
       sections.map((section) => {
         if (section.id === sectionId) {
@@ -74,7 +74,7 @@ export function ExampleEnvironment(
     updateSection(sectionId, newTree);
   };
 
-  const ref = useRef<SectionTreeApi<TreeItem>>(null);
+  const ref = useRef<SectionTreeApi<SectionTreeItem>>(null);
 
   const [lastContextMenu, setLastContextMenu] = React.useState<{
     itemId: string;

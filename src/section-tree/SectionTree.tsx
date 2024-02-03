@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { NodeApi, NodeRendererProps, Tree, TreeApi } from "react-arborist";
 import useResizeObserver from "use-resize-observer";
-import { TreeItem, SectionTreeApi, SectionTreeProps } from "./treeTypes";
+import { SectionTreeItem, SectionTreeApi, SectionTreeProps } from "./treeTypes";
 import { HeaderNode } from "./nodes/HeaderNode";
 import { ItemNode } from "./nodes/ItemNode";
 import {
@@ -26,9 +26,9 @@ import styles from "./SectionTree.module.css";
 export const SectionTree = React.forwardRef(
   (
     props: SectionTreeProps,
-    forwardRef: ForwardedRef<SectionTreeApi<TreeItem> | undefined>
+    forwardRef: ForwardedRef<SectionTreeApi<SectionTreeItem> | undefined>
   ) => {
-    const internalTreeRef = useRef<TreeApi<TreeItem>>(null);
+    const internalTreeRef = useRef<TreeApi<SectionTreeItem>>(null);
     const { ref, height } = useResizeObserver();
 
     const [visibilityEditing, setVisibilityEditing] = useState<string | null>(
@@ -58,7 +58,7 @@ export const SectionTree = React.forwardRef(
       [props]
     );
 
-    const filteredData = props.sections?.reduce<TreeItem[]>(
+    const filteredData = props.sections?.reduce<SectionTreeItem[]>(
       (acc, section, index) => {
         if (index > 0) {
           acc.push({
@@ -71,7 +71,7 @@ export const SectionTree = React.forwardRef(
         const sectionAllHidden =
           section.children.filter((node) => node.hidden).length ==
             section.children.length && visibilityEditing != section.id;
-        const sectionData: TreeItem[] = [
+        const sectionData: SectionTreeItem[] = [
           {
             id: "header-" + section.id,
             name: section.name,
@@ -132,7 +132,7 @@ export const SectionTree = React.forwardRef(
         };
         return (
           treeApi ? { ...treeApi, ...sectionApi } : sectionApi
-        ) as SectionTreeApi<TreeItem>;
+        ) as SectionTreeApi<SectionTreeItem>;
       },
       [
         internalTreeRef,
@@ -182,7 +182,7 @@ export const SectionTree = React.forwardRef(
       };
     }, [props, ref]);
 
-    const handleNodeClick = (node: NodeApi<TreeItem>) => {
+    const handleNodeClick = (node: NodeApi<SectionTreeItem>) => {
       const sectionId = findSectionFromNode(node);
       if (node.data.type == "header") {
         if (visibilityEditing == sectionId) {
@@ -262,7 +262,7 @@ export const SectionTree = React.forwardRef(
             });
           }}
         >
-          {(nodeProps: NodeRendererProps<TreeItem>) => {
+          {(nodeProps: NodeRendererProps<SectionTreeItem>) => {
             switch (nodeProps.node.data.type) {
               case "header":
                 return (

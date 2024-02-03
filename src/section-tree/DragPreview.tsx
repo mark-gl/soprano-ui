@@ -1,6 +1,6 @@
 import { DragPreviewProps, TreeApi } from "react-arborist";
 import { XYCoord } from "react-dnd";
-import { TreeItem } from "./treeTypes";
+import { SectionTreeItem } from "./treeTypes";
 import styles from "./DragPreview.module.css";
 
 const getStyle = (offset: XYCoord | null) => {
@@ -14,7 +14,7 @@ export function DragPreview({
   id,
   isDragging,
   treeRef,
-}: DragPreviewProps & { treeRef: React.RefObject<TreeApi<TreeItem>> }) {
+}: DragPreviewProps & { treeRef: React.RefObject<TreeApi<SectionTreeItem>> }) {
   const node = treeRef.current?.get(id);
   if (!node || !isDragging) return null;
   return (
