@@ -9,9 +9,11 @@ export function Row({
   children,
   onNodeClick,
   onSectionContextMenu,
+  onRowKeyDown,
 }: RowRendererProps<TreeItem> & {
   onNodeClick: (node: NodeApi<TreeItem>) => void;
   onSectionContextMenu?: (section: string, e: React.MouseEvent) => void;
+  onRowKeyDown?: (e: React.KeyboardEvent) => void;
 }) {
   const section = findSectionFromNode(node);
   const adjustedAttrs = { ...attrs };
@@ -41,6 +43,7 @@ export function Row({
           } else if (e.key === "Enter") {
             onNodeClick(node);
           }
+          onRowKeyDown?.(e);
         }}
         onContextMenu={(e) => {
           onSectionContextMenu?.(section, e);

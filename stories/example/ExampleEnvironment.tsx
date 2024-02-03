@@ -140,6 +140,11 @@ export function ExampleEnvironment(
             console.log("Section context menu opened for ", sectionId);
             e.preventDefault();
           }}
+          onRowKeyDown={(e) => {
+            if (e.key === " ") {
+              e.stopPropagation();
+            }
+          }}
         />
         <div>
           <br /> <br />

@@ -210,6 +210,7 @@ export const SectionTree = React.forwardRef(
               {...rowProps}
               onNodeClick={handleNodeClick}
               onSectionContextMenu={props.onSectionContextMenu}
+              onRowKeyDown={props.onRowKeyDown}
             />
           )}
           disableDrag={(node) =>
