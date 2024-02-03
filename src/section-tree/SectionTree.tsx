@@ -170,6 +170,21 @@ export const SectionTree = React.forwardRef(
       };
     }, [setVisibilityEditingCallback, visibilityEditing]);
 
+    useEffect(() => {
+      const treeArea = internalTreeRef.current?.listEl.current;
+      const handleContextMenu = (event: MouseEvent) => {
+        if (event.target === treeArea) {
+          props.onEmptySpaceContextMenu?.(event);
+        }
+      };
+
+      treeArea?.addEventListener("contextmenu", handleContextMenu);
+
+      return () => {
+        treeArea?.removeEventListener("contextmenu", handleContextMenu);
+      };
+    }, [props, ref]);
+
     const handleNodeClick = (node: NodeApi<TreeItem>) => {
       const sectionId = findSectionFromNode(node);
       if (node.data.type == "header") {

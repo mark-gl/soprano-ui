@@ -151,6 +151,10 @@ export function ExampleEnvironment(
           onFolderAction={(sectionId, itemId, action) => {
             console.log("Folder open: ", sectionId, itemId, action);
           }}
+          onEmptySpaceContextMenu={(e) => {
+            e.preventDefault();
+            console.log("Empty space context menu");
+          }}
         />
         <div>
           <br /> <br />
