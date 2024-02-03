@@ -3,3 +3,10 @@ import { SectionTree } from "./section-tree/SectionTree";
 
 export { MediaSlider };
 export { SectionTree };
+
+export {
+  createTreeNode,
+  deleteTreeNode,
+  moveTreeNode,
+  updateTreeNode,
+} from "./section-tree/treeOperations";
