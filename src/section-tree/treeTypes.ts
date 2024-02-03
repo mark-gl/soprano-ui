@@ -5,6 +5,8 @@ export interface SectionTreeApi<T> extends TreeApi<T> {
   setVisibilityEditing: (section: string | null) => void;
   optionsMenuActive: string | null;
   setOptionsMenuActive: (section: string | null) => void;
+  selectedItem: string | null;
+  setSelectedItem: (itemId: string | null) => void;
 }
 
 export type Item = {

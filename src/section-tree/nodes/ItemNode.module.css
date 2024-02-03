@@ -4,11 +4,11 @@
   cursor: pointer;
 }
 
-.item:hover {
+.item:hover:not(.selected) {
   background-color: var(--tree-item-background-hover);
 }
 
-.item:active {
+.item:active:not(.selected) {
   background-color: var(--tree-item-background-active);
 }
 
@@ -17,4 +17,9 @@
   width: 0.75rem;
   height: 0.75rem;
   margin-right: 0.25rem;
+}
+
+.selected {
+  background-color: var(--tree-item-background-selected);
+  color: var(--tree-item-text-selected);
 }

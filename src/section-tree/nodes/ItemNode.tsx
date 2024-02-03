@@ -15,6 +15,7 @@ export function ItemNode(
     ) => void;
     onNodeClick: (node: NodeApi<TreeItem>) => void;
     visibilityEditing: string | null;
+    selectedItem: string | null;
   }
 ) {
   const { node, style, dragHandle } = props;
@@ -29,7 +30,11 @@ export function ItemNode(
         props.onNodeClick(node);
       }}
     >
-      <div className={`${treeStyles.node} ${styles.item}`}>
+      <div
+        className={`${treeStyles.node} ${styles.item} ${
+          props.selectedItem == node.id ? styles.selected : ""
+        }`}
+      >
         {!node.isLeaf && (
           <div className={styles.folderIcon}>
             {node.isOpen ? (

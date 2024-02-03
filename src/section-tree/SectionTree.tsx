@@ -47,6 +47,10 @@ export const SectionTree = React.forwardRef(
         sectionId: string | null,
         buttonRef?: React.RefObject<HTMLDivElement>
       ) => void;
+      onSelectedItemChange: (
+        sectionId: string | null,
+        itemId: string | null
+      ) => void;
     },
     forwardRef: ForwardedRef<SectionTreeApi<TreeItem> | undefined>
   ) => {
@@ -76,6 +80,19 @@ export const SectionTree = React.forwardRef(
       ) => {
         setOptionsMenuActive(sectionId);
         props.onOptionsMenuActiveChange(sectionId, buttonRef);
+      },
+      [props]
+    );
+
+    const [selectedItem, setSelectedItem] = useState<string | null>(null);
+
+    const setSelectedItemCallback = useCallback(
+      (node: NodeApi<TreeItem> | null) => {
+        setSelectedItem(node?.id || null);
+        props.onSelectedItemChange(
+          node ? findSectionFromNode(node) : null,
+          node?.id || null
+        );
       },
       [props]
     );
@@ -186,12 +203,13 @@ export const SectionTree = React.forwardRef(
             ? null
             : node.data.sectionId!
         );
-      }
-      if (node.parent?.level == -1 && visibilityEditing) {
+      } else if (node.parent?.level == -1 && visibilityEditing) {
         const sectionId = findSectionFromNode(node);
         props.onItemVisibilityChange(sectionId, node.id, !node.data.hidden);
       } else if (!node.isLeaf) {
         node.toggle();
+      } else {
+        setSelectedItemCallback(node);
       }
     };
 
@@ -280,6 +298,7 @@ export const SectionTree = React.forwardRef(
                     visibilityEditing={visibilityEditing}
                     onItemVisibilityChange={props.onItemVisibilityChange}
                     onNodeClick={handleNodeClick}
+                    selectedItem={selectedItem}
                   />
                 );
             }

@@ -120,6 +120,9 @@ export function ExampleEnvironment(
           onVisibilityEditingChange={(sectionId) => {
             console.log("Visibility editing state changed to ", sectionId);
           }}
+          onSelectedItemChange={(sectionId, itemId) => {
+            console.log("Selected item changed to ", sectionId, itemId);
+          }}
         />
         <div>
           <br /> <br />
