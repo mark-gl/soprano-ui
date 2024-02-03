@@ -48,7 +48,7 @@ export function moveTreeNode(
     }
   }
 
-  return createTreeNode(deleteTreeNode(data, { id: args.id }), {
+  return createTreeNode(deleteTreeNode(data, { id: args.id }).result, {
     parentId: args.parentId ?? undefined,
     index: args.index + offset,
     newData: nodeToRemove,
@@ -58,15 +58,35 @@ export function moveTreeNode(
 export function deleteTreeNode(
   data: TreeItem[],
   args: { id: string }
-): TreeItem[] {
-  return data.reduce<TreeItem[]>((acc, item) => {
-    if (item.id === args.id) return acc;
-    if (item.children) {
-      item.children = deleteTreeNode(item.children, args);
+): { result: TreeItem[]; deletedIds: string[] } {
+  let deletedIds: string[] = [];
+
+  const result = data.reduce<TreeItem[]>((acc, item) => {
+    if (item.id === args.id) {
+      deletedIds.push(item.id);
+      const addChildIdsToDeleted = (item: TreeItem) => {
+        if (item.children) {
+          item.children.forEach((child) => {
+            deletedIds.push(child.id);
+            addChildIdsToDeleted(child);
+          });
+        }
+      };
+      addChildIdsToDeleted(item);
+      return acc;
     }
+
+    if (item.children) {
+      const innerDelete = deleteTreeNode(item.children, args);
+      item.children = innerDelete.result;
+      deletedIds = deletedIds.concat(innerDelete.deletedIds);
+    }
+
     acc.push(item);
     return acc;
   }, []);
+
+  return { result, deletedIds };
 }
 
 export function updateTreeNode(

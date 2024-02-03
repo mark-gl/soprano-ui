@@ -188,11 +188,11 @@ export function ExampleEnvironment(
                   const sectionIndex = sections.findIndex(
                     (section) => section.id === lastContextMenu.sectionId
                   );
-                  const newTree = deleteTreeNode(
+                  const deletion = deleteTreeNode(
                     sections[sectionIndex].children,
                     { id: lastContextMenu.itemId }
                   );
-                  updateSection(lastContextMenu.sectionId, newTree);
+                  updateSection(lastContextMenu.sectionId, deletion.result);
                   setLastContextMenu(null);
                 }}
               >
