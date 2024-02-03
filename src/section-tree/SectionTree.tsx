@@ -7,9 +7,8 @@ import React, {
   useState,
 } from "react";
 import { NodeApi, NodeRendererProps, Tree, TreeApi } from "react-arborist";
-import { TreeProps } from "react-arborist/dist/module/types/tree-props";
 import useResizeObserver from "use-resize-observer";
-import { TreeItem, Section, SectionTreeApi } from "./treeTypes";
+import { TreeItem, SectionTreeApi, SectionTreeProps } from "./treeTypes";
 import { HeaderNode } from "./nodes/HeaderNode";
 import { ItemNode } from "./nodes/ItemNode";
 import {
@@ -25,33 +24,7 @@ import styles from "./SectionTree.module.css";
 
 export const SectionTree = React.forwardRef(
   (
-    props: TreeProps<TreeItem> & {
-      sections?: Section[];
-      FolderOpenIcon: () => JSX.Element;
-      FolderClosedIcon: () => JSX.Element;
-      OptionsButtonIcon: () => JSX.Element;
-      DoneButtonIcon: () => JSX.Element;
-      onMoveWithinSection: (args: {
-        sectionId: string;
-        movedItemId: string;
-        newParentId: string | null;
-        newIndex: number;
-      }) => void;
-      onItemVisibilityChange: (
-        sectionId: string,
-        itemId: string,
-        hidden: boolean
-      ) => void;
-      onVisibilityEditingChange: (sectionId: string | null) => void;
-      onOptionsMenuActiveChange: (
-        sectionId: string | null,
-        buttonRef?: React.RefObject<HTMLDivElement>
-      ) => void;
-      onSelectedItemChange: (
-        sectionId: string | null,
-        itemId: string | null
-      ) => void;
-    },
+    props: SectionTreeProps,
     forwardRef: ForwardedRef<SectionTreeApi<TreeItem> | undefined>
   ) => {
     const internalTreeRef = useRef<TreeApi<TreeItem>>(null);
