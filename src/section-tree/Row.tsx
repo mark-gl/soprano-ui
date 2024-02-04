@@ -2,6 +2,32 @@ import { NodeApi, RowRendererProps } from "react-arborist";
 import { SectionTreeItem } from "./treeTypes";
 import { findSectionFromNode } from "./treeUtils";
 
+function isSeparatorOrEmpty(node: NodeApi<SectionTreeItem>) {
+  return node.data.type && ["separator", "empty"].includes(node.data.type);
+}
+
+function getFocusableNode(
+  currentNode: NodeApi<SectionTreeItem> | null,
+  next: boolean
+): NodeApi<SectionTreeItem> | null {
+  if (!currentNode) return null;
+  const nextNode = next ? currentNode.next : currentNode.prev;
+  if (!nextNode || !isSeparatorOrEmpty(nextNode)) {
+    return null;
+  }
+  const nodeAfterNext = next ? nextNode.next : nextNode.prev;
+  if (!nodeAfterNext) {
+    // Prevent focus of the last row if it's empty
+    return next ? currentNode.prev : currentNode.next;
+  }
+  if (nodeAfterNext && isSeparatorOrEmpty(nodeAfterNext)) {
+    // Skip focusing 2 rows
+    return nodeAfterNext;
+  }
+  // Skip focusing 1 row
+  return nextNode;
+}
+
 export function Row({
   node,
   attrs,
@@ -33,18 +59,10 @@ export function Row({
         ref={innerRef}
         onFocus={(e) => e.stopPropagation()}
         onKeyDown={(e) => {
-          if (
-            e.key === "ArrowUp" &&
-            node.tree.focusedNode?.prev?.data.type &&
-            node.tree.focusedNode?.prev?.data.type in ["separator", "empty"]
-          ) {
-            node.tree.focus(node.prev);
-          } else if (
-            e.key === "ArrowDown" &&
-            node.tree.focusedNode?.prev?.data.type &&
-            node.tree.focusedNode?.prev?.data.type in ["separator", "empty"]
-          ) {
-            node.tree.focus(node.next);
+          if (e.key === "ArrowUp") {
+            node.tree.focus(getFocusableNode(node.tree.focusedNode, false));
+          } else if (e.key === "ArrowDown") {
+            node.tree.focus(getFocusableNode(node.tree.focusedNode, true));
           } else if (e.key === "Enter") {
             onNodeClick(node, e as unknown as React.MouseEvent);
           }
