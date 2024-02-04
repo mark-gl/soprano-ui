@@ -210,6 +210,7 @@ export const SectionTree = React.forwardRef(
         props.onFolderAction?.(sectionId, node.id, node.isOpen);
       } else {
         node.tree.select(node.id);
+        props.onSelectedItemChange?.(sectionId, node.id);
       }
     };
 
