@@ -48,12 +48,12 @@ export const SectionTree = React.forwardRef(
     );
 
     const setOptionsMenuActiveCallback = useCallback(
-      (
-        sectionId: string | null,
-        buttonRef: React.RefObject<HTMLDivElement>
-      ) => {
+      (sectionId: string | null) => {
         setOptionsMenuActive(sectionId);
-        props.onOptionsMenuActiveChange?.(sectionId, buttonRef);
+        const optionsButton = document.querySelector(
+          `[data-options-button="${sectionId}"]`
+        );
+        props.onOptionsMenuActiveChange?.(sectionId, optionsButton);
       },
       [props]
     );
@@ -113,11 +113,8 @@ export const SectionTree = React.forwardRef(
           setVisibilityEditing: (section: string | null) => {
             setVisibilityEditingCallback(section);
           },
-          setOptionsMenuActive: (
-            section: string | null,
-            buttonRef: React.RefObject<HTMLDivElement>
-          ) => {
-            setOptionsMenuActiveCallback(section, buttonRef);
+          setOptionsMenuActive: (section: string | null) => {
+            setOptionsMenuActiveCallback(section);
           },
           optionsMenuActive,
           setSelectedItem: (itemId: string) => {
@@ -189,7 +186,9 @@ export const SectionTree = React.forwardRef(
           setVisibilityEditingCallback(null);
           return;
         }
-        setOptionsMenuActive(optionsMenuActive == sectionId ? null : sectionId);
+        setOptionsMenuActiveCallback(
+          optionsMenuActive == sectionId ? null : sectionId
+        );
       } else if (node.parent?.level == -1 && visibilityEditing == sectionId) {
         props.onItemVisibilityChange?.(sectionId, node.id, !node.data.hidden);
       } else if (!node.isLeaf) {

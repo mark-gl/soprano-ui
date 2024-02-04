@@ -26,7 +26,7 @@ export type SectionTreeProps = TreeProps<SectionTreeItem> & {
   onVisibilityEditingChange?: (sectionId: string | null) => void;
   onOptionsMenuActiveChange?: (
     sectionId: string | null,
-    buttonRef?: React.RefObject<HTMLDivElement>
+    button: Element | null
   ) => void;
   onSelectedItemChange?: (
     sectionId: string | null,
