@@ -1,15 +1,18 @@
 import { NodeApi } from "react-arborist";
 import { SectionTreeItem } from "./treeTypes";
 
-export function findNode(data: SectionTreeItem[], id: string): SectionTreeItem | undefined {
+export function findTreeNode(
+  data: SectionTreeItem[],
+  id: string
+): SectionTreeItem | undefined {
   for (const item of data) {
     if (item.id === id) return item;
-    const found = item.children && findNode(item.children, id);
+    const found = item.children && findTreeNode(item.children, id);
     if (found) return found;
   }
 }
 
-export function findParentNode(
+export function findParentTreeNode(
   data: SectionTreeItem[],
   childId: string
 ): SectionTreeItem | null {
@@ -17,7 +20,8 @@ export function findParentNode(
     if (item.children?.some((child) => child.id === childId)) {
       return item;
     }
-    const foundParent = item.children && findParentNode(item.children, childId);
+    const foundParent =
+      item.children && findParentTreeNode(item.children, childId);
     if (foundParent) return foundParent;
   }
   return null;

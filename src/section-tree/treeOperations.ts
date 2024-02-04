@@ -1,5 +1,5 @@
 import { SectionTreeItem } from "./treeTypes";
-import { findNode, findParentNode } from "./treeUtils";
+import { findParentTreeNode, findTreeNode } from "./treeUtils";
 
 export function createTreeNode(
   data: SectionTreeItem[],
@@ -10,7 +10,7 @@ export function createTreeNode(
     return data;
   }
 
-  const parent = findNode(data, args.parentId);
+  const parent = findTreeNode(data, args.parentId);
   if (parent) {
     parent.children = parent.children || [];
     parent.children.splice(
@@ -27,11 +27,11 @@ export function moveTreeNode(
   data: SectionTreeItem[],
   args: { id: string; parentId: string | null; index: number }
 ): SectionTreeItem[] {
-  const nodeToRemove = findNode(data, args.id);
+  const nodeToRemove = findTreeNode(data, args.id);
   if (!nodeToRemove) return data;
 
   let offset = 0;
-  const originalParent = findParentNode(data, args.id);
+  const originalParent = findParentTreeNode(data, args.id);
   if (originalParent == null || originalParent.id === args.parentId) {
     let originalIndex = 0;
     if (originalParent) {

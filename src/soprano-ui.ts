@@ -11,6 +11,8 @@ export {
   updateTreeNode,
 } from "./section-tree/treeOperations";
 
+export { findTreeNode, findParentTreeNode } from "./section-tree/treeUtils";
+
 export type {
   SectionTreeProps,
   SectionTreeApi,
