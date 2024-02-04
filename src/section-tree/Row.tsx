@@ -35,12 +35,14 @@ export function Row({
         onKeyDown={(e) => {
           if (
             e.key === "ArrowUp" &&
-            node.tree.focusedNode?.prev?.data.type === "separator"
+            node.tree.focusedNode?.prev?.data.type &&
+            node.tree.focusedNode?.prev?.data.type in ["separator", "empty"]
           ) {
             node.tree.focus(node.prev);
           } else if (
             e.key === "ArrowDown" &&
-            node.tree.focusedNode?.next?.data.type === "separator"
+            node.tree.focusedNode?.prev?.data.type &&
+            node.tree.focusedNode?.prev?.data.type in ["separator", "empty"]
           ) {
             node.tree.focus(node.next);
           } else if (e.key === "Enter") {
