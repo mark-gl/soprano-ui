@@ -177,6 +177,7 @@ export const SectionTree = React.forwardRef(
       const treeArea = internalTreeRef.current?.listEl.current;
       const handleContextMenu = (event: MouseEvent) => {
         if (event.target === treeArea) {
+          setOptionsMenuActiveCallback(null);
           props.onEmptySpaceContextMenu?.(event);
         }
       };
@@ -186,7 +187,7 @@ export const SectionTree = React.forwardRef(
       return () => {
         treeArea?.removeEventListener("contextmenu", handleContextMenu);
       };
-    }, [props, ref]);
+    }, [props, ref, setOptionsMenuActiveCallback]);
 
     const handleNodeClick = (
       node: NodeApi<SectionTreeItem>,
@@ -212,6 +213,23 @@ export const SectionTree = React.forwardRef(
       }
     };
 
+    const onItemContextMenu = (
+      sectionId: string,
+      itemId: string,
+      event: React.MouseEvent
+    ) => {
+      setOptionsMenuActiveCallback(null);
+      props.onItemContextMenu?.(sectionId, itemId, event);
+    };
+
+    const onSectionContextMenu = (
+      sectionId: string,
+      event: React.MouseEvent
+    ) => {
+      setOptionsMenuActiveCallback(null);
+      props.onSectionContextMenu?.(sectionId, event);
+    };
+
     return (
       <div className={styles.treeContainer} ref={ref}>
         <Tree
@@ -231,7 +249,7 @@ export const SectionTree = React.forwardRef(
             <Row
               {...rowProps}
               onNodeClick={handleNodeClick}
-              onSectionContextMenu={props.onSectionContextMenu}
+              onSectionContextMenu={onSectionContextMenu}
               onRowKeyDown={props.onRowKeyDown}
             />
           )}
@@ -306,7 +324,7 @@ export const SectionTree = React.forwardRef(
                     visibilityEditing={visibilityEditing}
                     onItemVisibilityChange={props.onItemVisibilityChange}
                     onNodeClick={handleNodeClick}
-                    onItemContextMenu={props.onItemContextMenu}
+                    onItemContextMenu={onItemContextMenu}
                     onRenameWithinSection={props.onRenameWithinSection}
                   />
                 );
