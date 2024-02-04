@@ -1,3 +1,4 @@
+import React from "react";
 import { TreeApi } from "react-arborist";
 import { TreeProps } from "react-arborist/dist/module/types/tree-props";
 
@@ -26,7 +27,8 @@ export type SectionTreeProps = TreeProps<SectionTreeItem> & {
   onVisibilityEditingChange?: (sectionId: string | null) => void;
   onOptionsMenuActiveChange?: (
     sectionId: string | null,
-    button: Element | null
+    button: Element | null,
+    event?: React.MouseEvent
   ) => void;
   onSelectedItemChange?: (
     sectionId: string | null,

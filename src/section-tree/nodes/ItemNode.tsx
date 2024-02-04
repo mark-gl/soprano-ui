@@ -19,7 +19,10 @@ export function ItemNode(
       itemId: string,
       event: React.MouseEvent<HTMLDivElement, MouseEvent>
     ) => void;
-    onNodeClick: (node: NodeApi<SectionTreeItem>) => void;
+    onNodeClick: (
+      node: NodeApi<SectionTreeItem>,
+      event: React.MouseEvent
+    ) => void;
     visibilityEditing: string | null;
     onRenameWithinSection?: (
       sectionId: string,
@@ -67,8 +70,8 @@ export function ItemNode(
     <div
       style={style}
       ref={dragHandle}
-      onClick={() => {
-        props.onNodeClick(node);
+      onClick={(e) => {
+        props.onNodeClick(node, e);
       }}
       onContextMenu={(e) => {
         e.preventDefault();

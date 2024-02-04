@@ -11,7 +11,10 @@ export function Row({
   onSectionContextMenu,
   onRowKeyDown,
 }: RowRendererProps<SectionTreeItem> & {
-  onNodeClick: (node: NodeApi<SectionTreeItem>) => void;
+  onNodeClick: (
+    node: NodeApi<SectionTreeItem>,
+    event: React.MouseEvent
+  ) => void;
   onSectionContextMenu?: (section: string, e: React.MouseEvent) => void;
   onRowKeyDown?: (e: React.KeyboardEvent) => void;
 }) {
@@ -41,7 +44,7 @@ export function Row({
           ) {
             node.tree.focus(node.next);
           } else if (e.key === "Enter") {
-            onNodeClick(node);
+            onNodeClick(node, e as unknown as React.MouseEvent);
           }
           onRowKeyDown?.(e);
         }}

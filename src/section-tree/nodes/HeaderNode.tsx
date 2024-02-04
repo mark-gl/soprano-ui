@@ -9,7 +9,10 @@ export function HeaderNode(
     DoneButtonIcon: () => JSX.Element;
     optionsMenuActive: string | null;
     visibilityEditing: string | null;
-    onNodeClick: (node: NodeApi<SectionTreeItem>) => void;
+    onNodeClick: (
+      node: NodeApi<SectionTreeItem>,
+      event: React.MouseEvent
+    ) => void;
   }
 ) {
   const { node, style, dragHandle } = props;
@@ -25,8 +28,8 @@ export function HeaderNode(
               ? styles.optionsButtonActive
               : ""
           }`}
-          onClick={() => {
-            props.onNodeClick(node);
+          onClick={(e) => {
+            props.onNodeClick(node, e);
           }}
         >
           {sectionEditing ? (
