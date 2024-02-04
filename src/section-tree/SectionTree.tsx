@@ -144,7 +144,11 @@ export const SectionTree = React.forwardRef(
       let checkClickOutside = false;
 
       const handleDocumentClick = (event: MouseEvent) => {
-        if (!visibilityEditing) return;
+        if (!visibilityEditing && !optionsMenuActive) return;
+        if (optionsMenuActive) {
+          setOptionsMenuActiveCallback(null);
+          return;
+        }
         if (!checkClickOutside) {
           checkClickOutside = true;
           return;
@@ -162,7 +166,12 @@ export const SectionTree = React.forwardRef(
       return () => {
         document.removeEventListener("click", handleDocumentClick);
       };
-    }, [setVisibilityEditingCallback, visibilityEditing]);
+    }, [
+      setVisibilityEditingCallback,
+      setOptionsMenuActiveCallback,
+      visibilityEditing,
+      optionsMenuActive,
+    ]);
 
     useEffect(() => {
       const treeArea = internalTreeRef.current?.listEl.current;
