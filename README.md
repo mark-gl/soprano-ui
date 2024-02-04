@@ -18,7 +18,9 @@ npm install soprano-ui
 
 ### Components
 
-Currently this package only exports one component, **MediaSlider**, which is a modified/styled version of the [Radix](https://github.com/radix-ui/primitives) Slider component. It accepts three new props:
+This packages exports two components.
+
+**MediaSlider** is a modified/styled version of the [Radix](https://github.com/radix-ui/primitives) Slider component. It accepts three new props:
 
 #### `keyboardFocusOnly`
 
@@ -37,6 +39,10 @@ Currently this package only exports one component, **MediaSlider**, which is a m
 - **Type**: `"contain" | "center"`
 - **Default**: `"contain"`
 - **Description**: Determines how the slider 'thumb' position is calculated. If set to `"contain"`, the thumb will stay contained within the slider. If set to `"center"`, the thumb will extend beyond the slider track so that it can stay centered on the current value.
+
+---
+
+**SectionTree** is a modified/styled version of [react-arborist](https://github.com/brimdata/react-arborist) that allows the Tree component to be split into several 'sections'. Each section has a header, an empty state, and the ability to show or hide items in the section. As its implementation is quite rudimentary, the extended API and props of the SectionTree have not been documented yet.
 
 ### Building
 
