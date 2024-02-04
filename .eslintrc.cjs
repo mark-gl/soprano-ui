@@ -13,13 +13,13 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   plugins: ["react-refresh", "react"],
   rules: {
-    indent: ["error", 2],
     quotes: ["error", "double"],
     "react-refresh/only-export-components": [
       "warn",
       { allowConstantExport: true },
     ],
     "react/display-name": "off",
+    "react/react-in-jsx-scope": "off",
   },
   settings: {
     react: {
