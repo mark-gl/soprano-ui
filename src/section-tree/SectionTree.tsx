@@ -186,7 +186,7 @@ export const SectionTree = React.forwardRef(
       const sectionId = findSectionFromNode(node);
       if (node.data.type == "header") {
         if (visibilityEditing == sectionId) {
-          setVisibilityEditing(null);
+          setVisibilityEditingCallback(null);
           return;
         }
         setOptionsMenuActive(optionsMenuActive == sectionId ? null : sectionId);
