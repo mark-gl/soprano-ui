@@ -78,6 +78,7 @@ export function Row({
         }}
         data-section={section}
         data-item={node.data.id}
+        data-folder={!node.isLeaf ? "true" : "false"}
       >
         {children}
       </div>
