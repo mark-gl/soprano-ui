@@ -77,6 +77,7 @@ export function Row({
           onSectionContextMenu?.(section, e);
         }}
         data-section={section}
+        data-item={node.data.id}
       >
         {children}
       </div>
