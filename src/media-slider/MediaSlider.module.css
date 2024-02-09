@@ -4,6 +4,8 @@
   --slider-track-thickness: 6px;
   --slider-color: #4c9de4;
   --slider-track-color: #eee;
+  --slider-focus-outline-color: black;
+  --slider-active-transform: scale(1.05);
 }
 
 .slider {
@@ -69,13 +71,13 @@
 
 .thumb:active,
 .slider:active .thumb {
-  transform: scale(1.05);
+  transform: var(--slider-active-transform);
 }
 
 .thumb:focus-visible:not([data-disabled]) {
   transition: none;
   outline: none;
-  box-shadow: 0 0 0 2px black;
+  box-shadow: 0 0 0 2px var(--slider-focus-outline-color);
   opacity: 1;
   cursor: pointer;
 }
