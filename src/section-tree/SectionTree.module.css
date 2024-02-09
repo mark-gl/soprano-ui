@@ -12,6 +12,8 @@
   --tree-drop-cursor-color: #4c9de4;
   --tree-item-editing-text: #0f0f0f;
   --tree-item-editing-background: #f7f7f7;
+  --tree-section-header-font-size: 0.75rem;
+  --tree-section-header-font-weight: 500;
 }
 
 .treeContainer {

@@ -6,8 +6,8 @@
 }
 
 .headerText {
-  font-size: 0.75rem;
-  font-weight: 500;
+  font-size: var(--tree-section-header-font-size);
+  font-weight: var(--tree-section-header-font-weight);
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
