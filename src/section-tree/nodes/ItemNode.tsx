@@ -95,6 +95,9 @@ export function ItemNode(
             type="text"
             defaultValue={node.data.name}
             ref={inputRef}
+            onContextMenu={(e) => {
+              e.stopPropagation();
+            }}
             onKeyDown={(e) => {
               if (e.key == "Enter") {
                 props.onRenameWithinSection?.(
@@ -106,9 +109,7 @@ export function ItemNode(
                 e.stopPropagation();
                 node.focus();
               }
-              if ((e.ctrlKey && e.key == "a") || e.key == " ") {
-                e.stopPropagation();
-              }
+              e.stopPropagation();
             }}
             onMouseDown={(e) => {
               e.stopPropagation();
