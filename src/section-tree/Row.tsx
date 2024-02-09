@@ -57,7 +57,12 @@ export function Row({
       <div
         {...adjustedAttrs}
         ref={innerRef}
-        onFocus={(e) => e.stopPropagation()}
+        onFocus={(e) => {
+          e.stopPropagation();
+          if (node.tree.focusedNode == node && isSeparatorOrEmpty(node)) {
+            node.tree.focus(node.prev);
+          }
+        }}
         onKeyDown={(e) => {
           if (e.key === "ArrowUp") {
             node.tree.focus(getFocusableNode(node.tree.focusedNode, false));
