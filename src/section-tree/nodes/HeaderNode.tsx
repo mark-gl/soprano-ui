@@ -7,6 +7,8 @@ export function HeaderNode(
   props: NodeRendererProps<SectionTreeItem> & {
     OptionsButtonIcon: () => JSX.Element;
     DoneButtonIcon: () => JSX.Element;
+    optionsButtonTooltip?: string;
+    doneButtonTooltip?: string;
     optionsMenuActive: string | null;
     visibilityEditing: string | null;
     onNodeClick: (
@@ -31,6 +33,11 @@ export function HeaderNode(
           onClick={(e) => {
             props.onNodeClick(node, e);
           }}
+          title={
+            sectionEditing
+              ? props.doneButtonTooltip
+              : props.optionsButtonTooltip
+          }
         >
           {sectionEditing ? (
             <props.DoneButtonIcon />

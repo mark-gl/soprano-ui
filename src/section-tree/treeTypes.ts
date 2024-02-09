@@ -8,6 +8,8 @@ export type SectionTreeProps = TreeProps<SectionTreeItem> & {
   FolderClosedIcon: () => JSX.Element;
   OptionsButtonIcon: () => JSX.Element;
   DoneButtonIcon: () => JSX.Element;
+  optionsButtonTooltip?: string;
+  doneButtonTooltip?: string;
   onMoveWithinSection?: (args: {
     sectionId: string;
     movedItemId: string;

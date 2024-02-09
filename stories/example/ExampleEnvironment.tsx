@@ -152,6 +152,8 @@ export function ExampleEnvironment(
             e.preventDefault();
             console.log("Empty space context menu");
           }}
+          optionsButtonTooltip="Options"
+          doneButtonTooltip="Done"
         />
         <div>
           <button

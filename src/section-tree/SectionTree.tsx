@@ -301,6 +301,8 @@ export const SectionTree = React.forwardRef(
                     {...nodeProps}
                     OptionsButtonIcon={props.OptionsButtonIcon}
                     DoneButtonIcon={props.DoneButtonIcon}
+                    optionsButtonTooltip={props.optionsButtonTooltip}
+                    doneButtonTooltip={props.doneButtonTooltip}
                     optionsMenuActive={optionsMenuActive}
                     visibilityEditing={visibilityEditing}
                     onNodeClick={handleNodeClick}
