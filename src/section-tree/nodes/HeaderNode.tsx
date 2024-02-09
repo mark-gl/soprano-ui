@@ -15,10 +15,10 @@ export function HeaderNode(
     ) => void;
   }
 ) {
-  const { node, style, dragHandle } = props;
+  const { node, style } = props;
   const sectionEditing = node.data.sectionId == props.visibilityEditing;
   return (
-    <div style={style} ref={dragHandle}>
+    <div style={style}>
       <div className={`${treeStyles.node} ${styles.header}`}>
         <div className={styles.headerText}>{node.data.name}</div>
         <div
