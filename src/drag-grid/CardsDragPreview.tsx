@@ -1,15 +1,16 @@
+import { CardInfo } from "./Card";
 import CardContent from "./CardContent";
 import styles from "./DragGrid.module.css";
 
-const CardsDragPreview = ({ cards }) => {
+const CardsDragPreview = (props: { cards: CardInfo[] }) => {
   return (
     <div>
-      {cards.slice(0, 3).map((card, i) => (
+      {props.cards.slice(0, 3).map((card, i) => (
         <div
           key={card.id}
           className={`${styles.card} ${styles.cardDragged}`}
           style={{
-            zIndex: cards.length - i,
+            zIndex: props.cards.length - i,
             transform: `rotateZ(${-i * 2.5}deg)`,
           }}
         >

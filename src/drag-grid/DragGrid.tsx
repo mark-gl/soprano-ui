@@ -1,11 +1,65 @@
 import { useReducer } from "react";
 import CardDragLayer from "./CardDragLayer";
-import Card from "./Card";
+import Card, { CardInfo } from "./Card";
 import styles from "./DragGrid.module.css";
 
 const TOTAL_ITEMS = 50;
 
-const cardReducer = (state, action) => {
+type DragGridState = {
+  cards: CardInfo[];
+  selectedCards: CardInfo[];
+  lastSelectedIndex: number;
+  dragIndex: number;
+  hoverIndex: number;
+  insertIndex: number;
+  isDragging: boolean;
+};
+
+const init_cards = [...Array(TOTAL_ITEMS).keys()].map((i) => ({
+  id: i + 1,
+  order: i,
+  url: "https://picsum.photos/80/45?random&" + i,
+}));
+
+const init_state: DragGridState = {
+  cards: init_cards,
+  selectedCards: [],
+  lastSelectedIndex: -1,
+  dragIndex: -1,
+  hoverIndex: -1,
+  insertIndex: -1,
+  isDragging: false,
+};
+
+type ClearSelectionAction = {
+  type: "CLEAR_SELECTION";
+};
+
+type UpdateSelectionAction = {
+  type: "UPDATE_SELECTION";
+  newSelectedCards: CardInfo[];
+  newLastSelectedIndex: number;
+};
+
+type RearrangeCardsAction = {
+  type: "REARRANGE_CARDS";
+  newCards: CardInfo[];
+};
+
+type SetInsertIndexAction = {
+  type: "SET_INSERTINDEX";
+  dragIndex: number;
+  hoverIndex: number;
+  insertIndex: number;
+};
+
+type AnyDragGridAction =
+  | ClearSelectionAction
+  | UpdateSelectionAction
+  | RearrangeCardsAction
+  | SetInsertIndexAction;
+
+const cardReducer = (state: DragGridState, action: AnyDragGridAction) => {
   switch (action.type) {
     case "CLEAR_SELECTION":
       return {
@@ -33,22 +87,6 @@ const cardReducer = (state, action) => {
   }
 };
 
-const init_cards = [...Array(TOTAL_ITEMS).keys()].map((i) => ({
-  id: i + 1,
-  order: i,
-  url: "https://picsum.photos/80/45?random&" + i,
-}));
-
-const init_state = {
-  cards: init_cards,
-  selectedCards: [],
-  lastSelectedIndex: -1,
-  dragIndex: -1,
-  hoverIndex: -1,
-  insertIndex: -1,
-  isDragging: false,
-};
-
 export default function DragGrid() {
   const [state, dispatch] = useReducer(cardReducer, init_state);
 
@@ -56,28 +94,37 @@ export default function DragGrid() {
     dispatch({ type: "CLEAR_SELECTION" });
   };
 
-  const handleItemSelection = (index, cmdKey, shiftKey) => {
-    let newSelectedCards;
+  const handleItemSelection = (
+    index: number,
+    cmdKey: boolean,
+    shiftKey: boolean
+  ) => {
+    let newSelectedCards: CardInfo[];
     const cards = state.cards;
-    const card = index < 0 ? "" : cards[index];
+    const card = index < 0 ? undefined : cards[index];
     const newLastSelectedIndex = index;
 
+    if (!card) {
+      return;
+    }
     if (!cmdKey && !shiftKey) {
       newSelectedCards = [card];
     } else if (shiftKey) {
       if (state.lastSelectedIndex >= index) {
-        newSelectedCards = [].concat.apply(
-          state.selectedCards,
-          cards.slice(index, state.lastSelectedIndex)
-        );
+        newSelectedCards = [
+          ...state.selectedCards,
+          ...cards.slice(index, state.lastSelectedIndex + 1),
+        ];
       } else {
-        newSelectedCards = [].concat.apply(
-          state.selectedCards,
-          cards.slice(state.lastSelectedIndex + 1, index + 1)
-        );
+        newSelectedCards = [
+          ...state.selectedCards,
+          ...cards.slice(state.lastSelectedIndex + 1, index + 1),
+        ];
       }
     } else if (cmdKey) {
-      const foundIndex = state.selectedCards.findIndex((f) => f === card);
+      const foundIndex = state.selectedCards.findIndex(
+        (f: CardInfo) => f === card
+      );
       // If found remove it to unselect it.
       if (foundIndex >= 0) {
         newSelectedCards = [
@@ -89,7 +136,7 @@ export default function DragGrid() {
       }
     }
     const finalList = cards
-      ? cards.filter((f) => newSelectedCards.find((a) => a === f))
+      ? cards.filter((f: CardInfo) => newSelectedCards.find((a) => a === f))
       : [];
     dispatch({
       type: "UPDATE_SELECTION",
@@ -98,12 +145,21 @@ export default function DragGrid() {
     });
   };
 
-  const rearrangeCards = (dragItem) => {
-    let cards = state.cards.slice();
-    const draggedCards = dragItem.cards;
+  const rearrangeCards = (card: {
+    cards: CardInfo[];
+    cardsDragStack: CardInfo[];
+    draggedCard: {
+      id: number;
+      order: number;
+      url: string;
+    };
+    cardsIDs: number[];
+  }) => {
+    const cards = state.cards.slice();
+    const draggedCards = card.cards;
 
     let dividerIndex;
-    if ((state.insertIndex >= 0) & (state.insertIndex < cards.length)) {
+    if (state.insertIndex >= 0 && state.insertIndex < cards.length) {
       dividerIndex = state.insertIndex;
     } else {
       // If missing insert index, put the dragged cards to the end of the queue
@@ -111,10 +167,10 @@ export default function DragGrid() {
     }
     const upperHalfRemainingCards = cards
       .slice(0, dividerIndex)
-      .filter((c) => !draggedCards.find((dc) => dc.id === c.id));
+      .filter((c: CardInfo) => !draggedCards.find((dc) => dc.id === c.id));
     const lowerHalfRemainingCards = cards
       .slice(dividerIndex)
-      .filter((c) => !draggedCards.find((dc) => dc.id === c.id));
+      .filter((c: CardInfo) => !draggedCards.find((dc) => dc.id === c.id));
     const newCards = [
       ...upperHalfRemainingCards,
       ...draggedCards,
@@ -123,7 +179,11 @@ export default function DragGrid() {
     dispatch({ type: "REARRANGE_CARDS", newCards: newCards });
   };
 
-  const setInsertIndex = (dragIndex, hoverIndex, newInsertIndex) => {
+  const setInsertIndex = (
+    dragIndex: number,
+    hoverIndex: number,
+    newInsertIndex: number
+  ) => {
     if (
       state.dragIndex === dragIndex &&
       state.hoverIndex === hoverIndex &&
@@ -143,7 +203,7 @@ export default function DragGrid() {
     <main>
       <CardDragLayer />
       <div className={styles.container}>
-        {state.cards.map((card, i) => {
+        {state.cards.map((card: CardInfo, i: number) => {
           const insertLineOnLeft =
             state.hoverIndex === i && state.insertIndex === i;
           const insertLineOnRight =

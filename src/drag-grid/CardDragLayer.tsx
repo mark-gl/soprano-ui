@@ -1,8 +1,11 @@
 import { useDragLayer } from "react-dnd";
 import ItemTypes from "./ItemTypes";
 import CardsDragPreview from "./CardsDragPreview";
+import { CardInfo } from "./Card";
+import { CSSProperties } from "react";
+import { Identifier } from "dnd-core";
 
-const layerStyles = {
+const layerStyles: CSSProperties = {
   position: "fixed",
   pointerEvents: "none",
   zIndex: 100,
@@ -12,7 +15,7 @@ const layerStyles = {
   bottom: 0,
 };
 
-const getItemStyles = (currentOffset) => {
+const getItemStyles = (currentOffset: { x: number; y: number } | null) => {
   if (!currentOffset) {
     return {
       display: "none",
@@ -35,7 +38,10 @@ export default function CardDragLayer() {
     })
   );
 
-  const renderItem = (type, item) => {
+  const renderItem = (
+    type: Identifier | null,
+    item: { cardsDragStack: CardInfo[] }
+  ) => {
     switch (type) {
       case ItemTypes.CARD:
         return <CardsDragPreview cards={item.cardsDragStack} />;

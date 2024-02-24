@@ -1,12 +1,50 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, MouseEventHandler } from "react";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import { useDrag, useDrop } from "react-dnd";
-import ItemTypes from "./ItemTypes";
 import CardContent from "./CardContent";
 import styles from "./DragGrid.module.css";
+import ItemTypes from "./ItemTypes";
 
-export default function Card(props) {
-  const ref = useRef(null);
+export type CardInfo = {
+  id: number;
+  order: number;
+  url: string;
+};
+
+export type CardProps = {
+  selectedCards: CardInfo[];
+  clearItemSelection: () => void;
+  rearrangeCards: (dragItem: {
+    cards: CardInfo[];
+    cardsDragStack: CardInfo[];
+    draggedCard: {
+      id: number;
+      order: number;
+      url: string;
+    };
+    cardsIDs: number[];
+  }) => void;
+  setInsertIndex: (
+    dragIndex: number,
+    hoverIndex: number,
+    newInsertIndex: number
+  ) => void;
+  onSelectionChange: (
+    index: number,
+    metaKey: boolean,
+    shiftKey: boolean
+  ) => void;
+  id: number;
+  order: number;
+  index: number;
+  url: string;
+  insertLineOnLeft: boolean;
+  insertLineOnRight: boolean;
+  isSelected: boolean;
+};
+
+export default function Card(props: CardProps) {
+  const ref = useRef<HTMLDivElement>(null);
 
   const [{ isDragging }, drag, preview] = useDrag({
     type: ItemTypes.CARD,
@@ -37,7 +75,7 @@ export default function Card(props) {
     isDragging: (monitor) => {
       return monitor.getItem().cardsIDs.includes(props.id);
     },
-    end: (item, monitor) => {
+    end: (item) => {
       props.rearrangeCards(item);
       props.clearItemSelection();
     },
@@ -48,22 +86,30 @@ export default function Card(props) {
 
   const [{ hovered }, drop] = useDrop({
     accept: ItemTypes.CARD,
-    // drop: () => ({
-    //               boxType: "Picture"
-    //   }),
-    hover: (item, monitor) => {
+    hover: (
+      item: {
+        draggedCard: {
+          index: number;
+        };
+      },
+      monitor
+    ) => {
       const dragIndex = item.draggedCard.index;
       const hoverIndex = props.index;
 
       // Determine rectangle on screen
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
 
+      // Determine mouse position
+      const pointerOffset = monitor.getClientOffset();
+
+      if (!hoverBoundingRect || !pointerOffset) {
+        return;
+      }
       // Get horizontal middle
       const midX =
         hoverBoundingRect.left +
         (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
-      // Determine mouse position
-      const pointerOffset = monitor.getClientOffset();
       const newInsertIndex =
         pointerOffset.x < midX ? hoverIndex : hoverIndex + 1;
       props.setInsertIndex(dragIndex, hoverIndex, newInsertIndex);
@@ -75,7 +121,7 @@ export default function Card(props) {
 
   drag(drop(ref));
 
-  const onClick = (e) => {
+  const onClick: MouseEventHandler<HTMLDivElement> = (e) => {
     props.onSelectionChange(props.index, e.metaKey, e.shiftKey);
   };
 
@@ -94,7 +140,7 @@ export default function Card(props) {
     // return a function from here, and React will call
     // it prior to unmounting.
     // return () => console.log('unmounting...');
-  }, []);
+  }, [preview]);
 
   const { url } = props;
   const opacity = isDragging ? 0.4 : 1;
