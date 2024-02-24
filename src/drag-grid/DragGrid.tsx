@@ -18,7 +18,7 @@ type DragGridState = {
 const init_cards = [...Array(TOTAL_ITEMS).keys()].map((i) => ({
   id: i + 1,
   order: i,
-  url: "https://picsum.photos/80/45?random&" + i,
+  url: "https://picsum.photos/400/400?random&" + i,
 }));
 
 const init_state: DragGridState = {
