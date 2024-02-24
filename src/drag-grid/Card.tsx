@@ -122,7 +122,7 @@ export default function Card(props: CardProps) {
   drag(drop(ref));
 
   const onClick: MouseEventHandler<HTMLDivElement> = (e) => {
-    props.onSelectionChange(props.index, e.metaKey, e.shiftKey);
+    props.onSelectionChange(props.index, e.ctrlKey, e.shiftKey);
   };
 
   useEffect(() => {

@@ -96,7 +96,7 @@ export default function DragGrid() {
 
   const handleItemSelection = (
     index: number,
-    cmdKey: boolean,
+    ctrlKey: boolean,
     shiftKey: boolean
   ) => {
     let newSelectedCards: CardInfo[];
@@ -107,7 +107,7 @@ export default function DragGrid() {
     if (!card) {
       return;
     }
-    if (!cmdKey && !shiftKey) {
+    if (!ctrlKey && !shiftKey) {
       newSelectedCards = [card];
     } else if (shiftKey) {
       if (state.lastSelectedIndex >= index) {
@@ -121,7 +121,7 @@ export default function DragGrid() {
           ...cards.slice(state.lastSelectedIndex + 1, index + 1),
         ];
       }
-    } else if (cmdKey) {
+    } else if (ctrlKey) {
       const foundIndex = state.selectedCards.findIndex(
         (f: CardInfo) => f === card
       );

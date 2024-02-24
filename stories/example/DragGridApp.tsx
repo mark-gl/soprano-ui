@@ -6,7 +6,7 @@ export default function DragGridApp() {
   return (
     <div className="App">
       <h2>Drag and drop multiple items with React DnD</h2>
-      <h4>Use Shift or Cmd key to multi-select</h4>
+      <h4>Use Ctrl or Shift key to multi-select</h4>
       <DndProvider backend={HTML5Backend}>
         <DragGrid />
       </DndProvider>
