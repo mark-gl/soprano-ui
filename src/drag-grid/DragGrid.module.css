@@ -1,0 +1,85 @@
+.container {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cardWrapper {
+  position: relative;
+}
+
+.card {
+  border: 3px solid transparent;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.cardDragged {
+  position: absolute;
+  transform-origin: bottom left;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.cardWrapperActive:not(.cardWrapperDragging) .card {
+  border: 3px solid #4e56ff;
+}
+
+.cardOuter {
+  border: 2px solid transparent;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.cardWrapperSelected:not(.cardWrapperDragging) .cardOuter {
+  border: 2px solid orange;
+}
+
+.cardInner {
+  position: relative;
+  width: 80px;
+  height: 45px;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #aaa;
+  font-weight: bold;
+  font-size: 24px;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.cardDragged .cardInner {
+  box-shadow: 0 0px 2px rgba(0, 0, 0, 0.35);
+}
+
+.cardWrapperDragging .cardInner {
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cardWrapperDragging.cardWrapperHovered .cardInner {
+  border: 2px solid orange;
+  border-radius: 2px;
+  background-color: transparent;
+}
+
+.cardWrapperDragging .cardInner img {
+  opacity: 0;
+}
+
+.insertLineLeft,
+.insertLineRight {
+  position: absolute;
+  top: 0;
+  left: -1px;
+  height: 100%;
+  width: 2px;
+  background-color: orange;
+}
+
+.insertLineRight {
+  left: auto;
+  right: -1px;
+}
