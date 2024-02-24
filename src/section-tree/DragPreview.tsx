@@ -1,7 +1,7 @@
 import { DragPreviewProps, TreeApi } from "react-arborist";
-import { XYCoord } from "react-dnd";
 import { SectionTreeItem } from "./treeTypes";
 import styles from "./DragPreview.module.css";
+import { XYCoord } from "dnd-core";
 
 const getStyle = (offset: XYCoord | null) => {
   if (!offset) return { display: "none" };
