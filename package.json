@@ -36,7 +36,9 @@
     "@radix-ui/react-use-controllable-state": "^1.0.1",
     "@radix-ui/react-use-previous": "^1.0.1",
     "@radix-ui/react-use-size": "^1.0.1",
-    "react-arborist": "^3.4.0"
+    "react-arborist": "^3.4.0",
+    "react-dnd": "^16.0.1",
+    "use-resize-observer": "^9.1.0"
   },
   "peerDependencies": {
     "react": "^18.2.0",
