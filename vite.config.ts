@@ -1,11 +1,20 @@
-import { defineConfig } from "vite";
+import { UserConfig, defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import { resolve } from "path";
 import dts from "vite-plugin-dts";
 import { libInjectCss } from "vite-plugin-lib-inject-css";
 
 export default defineConfig({
-  plugins: [react(), dts({ include: "src" }), libInjectCss()],
+  plugins: [
+    react(),
+    dts({ include: "src" }),
+    libInjectCss(),
+  ] as UserConfig["plugins"],
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: ["src/setupTests.ts"],
+  },
   build: {
     copyPublicDir: false,
     lib: {
