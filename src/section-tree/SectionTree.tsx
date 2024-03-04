@@ -145,12 +145,12 @@ export const SectionTree = React.forwardRef(
 
       const handleDocumentClick = (event: MouseEvent) => {
         if (!visibilityEditing && !optionsMenuActive) return;
-        if (optionsMenuActive) {
-          setOptionsMenuActiveCallback(null);
-          return;
-        }
         if (!checkClickOutside) {
           checkClickOutside = true;
+          return;
+        }
+        if (optionsMenuActive) {
+          setOptionsMenuActiveCallback(null);
           return;
         }
 
