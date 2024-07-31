@@ -8,8 +8,8 @@
   --tree-item-padding: 0 0.5rem;
   --tree-item-margin: 0.125rem 0.5rem;
   --tree-item-border-radius: 0.25rem;
+  --tree-drop-cursor-border: 2px solid #4c9de4;
   --tree-empty-text: #999;
-  --tree-drop-cursor-color: #4c9de4;
   --tree-item-editing-text: #0f0f0f;
   --tree-item-editing-background: #f7f7f7;
   --tree-section-header-font-size: 0.75rem;
