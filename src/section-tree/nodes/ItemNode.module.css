@@ -1,6 +1,6 @@
 .item {
   font-size: 0.9rem;
-  transition: background-color 100ms ease-out;
+  transition: var(--tree-item-transition);
   cursor: pointer;
 }
 
