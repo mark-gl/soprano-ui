@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { SectionTree } from "../src/section-tree/SectionTree";
 import { ExampleEnvironment } from "./example/ExampleEnvironment";
 
