@@ -1,5 +1,9 @@
 # soprano-ui
 
+> [!WARNING]
+> This repository will no longer be updated. Future `soprano-ui` development will take place in the [Aria](https://github.com/aria-player/aria) music player monorepo.
+> 
+> 
 React components tailored for use in media playing applications
 
 ### Usage
